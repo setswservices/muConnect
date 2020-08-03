@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/useGeneratedPasscode"
+        android:checkable="true"
+        android:orderInCategory="0"
+        android:title="@string/use_generated_passcode" />
+</menu>
