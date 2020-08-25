@@ -1,4 +1,4 @@
-package com.sanahealth.SanaMaskv3;
+package com.mushin.muconnect;
 
 import android.app.Activity;
 import android.content.Context;

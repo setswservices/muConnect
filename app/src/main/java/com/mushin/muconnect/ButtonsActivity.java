@@ -1,6 +1,5 @@
-package com.sanahealth.SanaMaskv3;
+package com.mushin.muconnect;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -89,25 +88,25 @@ public class ButtonsActivity extends DialogFragment {
                         int toSession = Integer.parseInt(str2);
                         ((MainActivity)getActivity()).initiateSendData(fromSession, toSession);
 
-                        Log.e(LOG_TAG," *** Deleting "+com.sanahealth.SanaMaskv3.MainActivity.FirstFileName);
+                        Log.e(LOG_TAG," *** Deleting "+com.mushin.muconnect.MainActivity.FirstFileName);
 
-			if(com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile == null)
+			if(com.mushin.muconnect.MainActivity.FirstSanaFile == null)
 			{
 				Log.e(LOG_TAG, "Nothing to delete");
 			}
 			else
 			{
-				if(com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.exists()) 
+				if(com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
 				{
-					com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.delete();
-					if (com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.exists()) 
+					com.mushin.muconnect.MainActivity.FirstSanaFile.delete();
+					if (com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
 					{
-						Log.e(LOG_TAG, "*** [A] " + com.sanahealth.SanaMaskv3.MainActivity.FirstFileName + "didn't get deleted");
+						Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't get deleted");
 					}
 				} 
 				else 
 				{
-				Log.e(LOG_TAG, "*** [A] " + com.sanahealth.SanaMaskv3.MainActivity.FirstFileName + "didn't exist; Nothing to delete");
+				Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't exist; Nothing to delete");
 				}
 			}
 
@@ -148,25 +147,25 @@ public class ButtonsActivity extends DialogFragment {
                         int toSession = Integer.parseInt(str2);
                         ((MainActivity)getActivity()).initiateSendLog(fromSession, toSession);
 
-                        Log.e(LOG_TAG," *** Deleting "+com.sanahealth.SanaMaskv3.MainActivity.FirstFileName);
+                        Log.e(LOG_TAG," *** Deleting "+com.mushin.muconnect.MainActivity.FirstFileName);
 
-			if(com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile == null)
+			if(com.mushin.muconnect.MainActivity.FirstSanaFile == null)
 			{
 				Log.e(LOG_TAG, "Nothing to delete");
 			}
 			else
 			{
-				if(com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.exists()) 
+				if(com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
 				{
-					com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.delete();
-					if (com.sanahealth.SanaMaskv3.MainActivity.FirstSanaFile.exists()) 
+					com.mushin.muconnect.MainActivity.FirstSanaFile.delete();
+					if (com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
 					{
-						Log.e(LOG_TAG, "*** [A] " + com.sanahealth.SanaMaskv3.MainActivity.FirstFileName + "didn't get deleted");
+						Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't get deleted");
 					}
 				} 
 				else 
 				{
-				Log.e(LOG_TAG, "*** [A] " + com.sanahealth.SanaMaskv3.MainActivity.FirstFileName + "didn't exist; Nothing to delete");
+				Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't exist; Nothing to delete");
 				}
 			}
 
@@ -423,7 +422,7 @@ public class ButtonsActivity extends DialogFragment {
             // send data to service
             value = message.getBytes("UTF-8");
 
-            if( com.sanahealth.SanaMaskv3.MainActivity.mService != null) com.sanahealth.SanaMaskv3.MainActivity.mService.writeRXCharacteristic(value);
+            if( com.mushin.muconnect.MainActivity.mService != null) com.mushin.muconnect.MainActivity.mService.writeRXCharacteristic(value);
 
             Log.e(LOG_TAG, "*** Sending: ".concat(message));
 

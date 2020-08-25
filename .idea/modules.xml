@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MuConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/MuConnect.iml" group="MuConnect" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="MuConnect/app" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="muConnect/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/muConnect.iml" filepath="$PROJECT_DIR$/.idea/modules/muConnect.iml" group="muConnect" />
     </modules>
   </component>
 </project>

@@ -29,7 +29,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-package com.sanahealth.SanaMaskv3;
+package com.mushin.muconnect;
 
 
 
@@ -44,7 +44,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.DownloadManager;
-import android.app.FragmentManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
@@ -648,7 +647,7 @@ public void InitGraphs()
 
                 //Connect button pressed, open DeviceListActivity class, with popup windows that scan for devices
 
-                Intent newIntent = new Intent(MainActivity.this, com.sanahealth.SanaMaskv3.DeviceListActivity.class);
+                Intent newIntent = new Intent(MainActivity.this, com.mushin.muconnect.DeviceListActivity.class);
                 //Intent newIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                 startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
                 bGotSanaName = false;
