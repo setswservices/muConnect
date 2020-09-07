@@ -40,7 +40,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -90,21 +90,21 @@ public class UartService extends Service {
     private static final int STATE_CONNECTION_DELAY_BEFORE_DISCOVERY = 9;
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.sanahealth.nrfUART.ACTION_GATT_CONNECTED";
+            "com.mushin.nrfUART.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.sanahealth.nrfUART.ACTION_GATT_DISCONNECTED";
+            "com.mushin.nrfUART.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_READY =
-            "com.sanahealth.nrfUART.ACTION_GATT_READY";
+            "com.mushin.nrfUART.ACTION_GATT_READY";
     public final static String ACTION_DATA_AVAILABLE =
-            "com.sanahealth.nrfUART.ACTION_DATA_AVAILABLE";
+            "com.mushin.nrfUART.ACTION_DATA_AVAILABLE";
     public final static String EXTRA_DATA =
-            "com.sanahealth.nrfUART.EXTRA_DATA";
+            "com.mushin.nrfUART.EXTRA_DATA";
     public final static String DEVICE_DOES_NOT_SUPPORT_UART =
-            "com.sanahealth.nrfUART.DEVICE_DOES_NOT_SUPPORT_UART";
+            "com.mushin.nrfUART.DEVICE_DOES_NOT_SUPPORT_UART";
     public final static String ACTION_GATT_ERROR =
-            "com.sanahealth.nrfUART.ACTION_GATT_ERROR";
+            "com.mushin.nrfUART.ACTION_GATT_ERROR";
     public final static String ACTION_GATT_RECONNECTING =
-            "com.sanahealth.nrfUART.ACTION_GATT_RECONNECTING";
+            "com.mushin.nrfUART.ACTION_GATT_RECONNECTING";
 
 
     public static final UUID TX_POWER_UUID = UUID.fromString("00001804-0000-1000-8000-00805f9b34fb");

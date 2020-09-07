@@ -36,6 +36,7 @@ package com.mushin.muconnect;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -62,9 +63,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -101,7 +102,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 	private static final int SELECT_INIT_FILE_REQ = 2;
 	
 	private static final int UART_PROFILE_READY = 10;
-	public static final String TAG = "SANA Display";
+	public static final String TAG = "muShin Display";
 	private static final int UART_PROFILE_CONNECTED = 20;
 	private static final int UART_PROFILE_DISCONNECTED = 21;
 	private static final int STATE_OFF = 10;
@@ -129,6 +130,21 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 	// private ArrayAdapter<String> listAdapter;
 
+	private com.mushin.muconnect.Configuration deviceConfiguration = new com.mushin.muconnect.Configuration();
+
+	public com.mushin.muconnect.Configuration getDeviceConfiguration() {
+		return deviceConfiguration;
+	}
+
+	public void setDeviceConfiguration(com.mushin.muconnect.Configuration newConfiguration) {
+
+		ArrayList<String> updateCfgCommands = com.mushin.muconnect.Configuration.getConfigurationUpdateCommands(this.deviceConfiguration, newConfiguration);
+
+		// TODO: send updated configuration to device
+
+		this.deviceConfiguration = newConfiguration;
+	}
+
 	private enum ConnectionState {
 		DISCONNECTED,
 		CONNECTED,
@@ -141,16 +157,17 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 	private Button btnConnectDisconnect;
 	private Button btnRequestData;
 	private Button btnActivities;
+	private Button btnConfig;
 	
 	// private Button btnSend;
 	
 	// private EditText edtMessage;
 
-	public static FileWriter mSanaFileWriter = null;
-	public static File mSanaFile = null;
+	public static FileWriter mDataFileWriter = null;
+	public static File mDataFile = null;
 
 	public static String FirstFileName;
-	public static File FirstSanaFile=null;
+	public static File FirstDataFile =null;
 
 	private LineGraphSeries<DataPoint> mLineSeriesHR;
 	private LineGraphSeries<DataPoint> mLineSeriesHRV;
@@ -161,7 +178,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 	private static boolean bDataHeader = false;
 	private static boolean bLogHeader = false;
-	private boolean bGotSanaName = false;
+	private boolean bGotDeviceName = false;
 	private boolean bEraseAlready=false;
 	private String EraseThisFIle;
 	
@@ -173,9 +190,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 	private static int mHRSampleNumber = 0;
 	private static int mHRVSampleNumber = 0;
 
-	public static int SanaSessionNumber= -1;
-	public static int SanaMaskMode= -1;
-	public static int SanaMaskStatus= -1;
+	public static int DeviceSessionNumber = -1;
+	public static int DeviceMode = -1;
+	public static int DeviceStatus = -1;
 
 	public static int CSV_Filetype = 0;
 
@@ -184,15 +201,15 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 	public static boolean DoingSendData = false;
 	public static boolean DoingSendLog = false;
 	private String currentDateTimeString, firstDateTimeString;
-	public static String SanaConnectionName = "NONAME";
-	public static String SanaErrorInfo = "NOINFO";
-	private String SanaFirmwareVersion = "";
+	public static String DeviceConnectionName = "NONAME";
+	public static String DeviceErrorInfo = "NOINFO";
+	private String DeviceFirmwareVersion = "";
 	private String VCFWFirmwareVersion = "";
 	private String ComboFirmwareVersion = "";
-	private String SanaStageVersion = "";
-	private String SanaMaskModeString = "";
-	private String SanaMaskStatusString = "";
-	private String SanaSessionNumberString = "";
+	private String DeviceStageVersion = "";
+	private String DeviceModeString = "";
+	private String DeviceMaskStatusString = "";
+	private String SessionNumberString = "";
 	private int iFirstRRi;
 
 	public static boolean FirstCreated=true;
@@ -202,36 +219,36 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 	private TextView HRValue;
 
-	private static final String LOG_TAG = "SANA_BLE";
+	private static final String LOG_TAG = "MUSHIN_BLE";
 
 	public static String CurrentFileName="NULL";
 
 	public static String OddMessage = "";
 
-	private static final  int SANA_PACKET_HRVDATA		= 1;		// HRV Data
-	private static final  int SANA_PACKET_CPS			= 2;		// Current Program Status
-	private static final  int SANA_PACKET_FILENUM		= 3;		// FDS File Number
-	private static final  int SANA_PACKET_SANANAME		= 4;		// Unique Mask Name
-	private static final  int SANA_FIRMWARE_VERSION		= 5;		// Version
-	private static final  int SANA_BATTERY_STATUS		= 6;
-	private static final  int SANA_STOPPING				= 7;		// Battery Status
-	private static final  int SANA_VCFW_VERSION			= 8;		// VC FW eresion
-	private static final  int SANA_MASK_STAGE			= 9;		// Mask session stage
-	private static final  int SANA_SESSION_ID				= 20	;	// Current session id
-	private static final  int SANA_PACKET_HRVEND			= 21	;	// Signifies end of current session HRV data
-	private static final  int SANA_PACKET_HRVDONE		= 22;		// Signifies end of ALL session HRV data
-	private static final  int SANA_MASK_MODE				= 23;	// mode is HRV or standard
-	private static final  int SANA_LIGHT_SOUND_LEVELS	= 24;	// Light and Sound Levels
+	private static final  int PACKET_HRVDATA = 1;		// HRV Data
+	private static final  int PACKET_CPS = 2;		// Current Program Status
+	private static final  int PACKET_FILENUM = 3;		// FDS File Number
+	private static final  int PACKET_DEVICE_NAME = 4;		// Unique Mask Name
+	private static final  int PACKET_FIRMWARE_VERSION = 5;		// Version
+	private static final  int PACKET_BATTERY_STATUS = 6;
+	private static final  int PACKET_STOPPING = 7;		// Battery Status
+	private static final  int PACKET_VCFW_VERSION = 8;		// VC FW eresion
+	private static final  int PACKET_MASK_STAGE = 9;		// Mask session stage
+	private static final  int PACKET_SESSION_ID = 20	;	// Current session id
+	private static final  int PACKET_PACKET_HRVEND = 21	;	// Signifies end of current session HRV data
+	private static final  int PACKET_HRVDONE = 22;		// Signifies end of ALL session HRV data
+	private static final  int PACKET_MASK_MODE = 23;	// mode is HRV or standard
+	private static final  int PACKET_LIGHT_SOUND_LEVELS = 24;	// Light and Sound Levels
 
-	private static final  int SANA_MASK_STATUS			= 25;	// Light and Sound Levels
-	private static final  int SANA_ERROR_INFO			= 26;	// Error information
+	private static final  int PACKET_MASK_STATUS = 25;	// Light and Sound Levels
+	private static final  int PACKET_ERROR_INFO = 26;	// Error information
 
-	private static final  int SANA_EVENT_ONE				= 27;		// First half of event/error packet
-	private static final  int SANA_EVENT_TWO				= 28;		// Second half of event/error packet
+	private static final  int PACKET_EVENT_ONE = 27;		// First half of event/error packet
+	private static final  int PACKET_EVENT_TWO = 28;		// Second half of event/error packet
 
-	private static final int SANA_SEND_VCFW_SIZE		= 10;	// VC FW Update
-	private static final int SANA_VCFW_ACK 				= 11	;	// ACK of FW update packet
-	private static final int SANA_VCFW_NACK 				= 12;	// NACK of FW update packet
+	private static final int PACKET_SEND_VCFW_SIZE		= 10;	// VC FW Update
+	private static final int PACKET_VCFW_ACK = 11	;	// ACK of FW update packet
+	private static final int PACKET_VCFW_NACK = 12;	// NACK of FW update packet
 
 
 	private static final int 	STORED_MODE_CHANGEABLE_MASK		= (1 << 0);
@@ -276,7 +293,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 	private byte[] BytesVCFW;
 	private int BytesVCFWLen, BytesVCFWSent=0;
 
-	public static String sanaFileName;
+	public static String dataFileName;
 
 	private int iHrData = 0;
 	private int[] iHrvData;
@@ -346,17 +363,16 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         {
             // send data to service
             value = message.getBytes("UTF-8");
-            showMessage(getApplicationContext(),"Requesting Data From Sana Mask");
-            Log.e(LOG_TAG,"Requesting Data From Sana Mask");
+            showMessage(getApplicationContext(),"Requesting Data From Device");
+            Log.e(LOG_TAG,"Requesting Data From Device");
 
             if(mService != null) mService.writeRXCharacteristic(value);
 
-            CloseSanaFile(getApplicationContext());
+            CloseDataFile(getApplicationContext());
 
             ScheduleCreateDL = true;
 
             Log.e(LOG_TAG, "*** DOING ScheduleCreateDL ");
-            // createSanaFile(getApplicationContext(), 1, SanaSessionNumber);
 
             DoingSendData = true;
         }
@@ -473,13 +489,13 @@ public void InitGraphs()
         {
             // send data to service
             value = message.getBytes("UTF-8");
-            showMessage(getApplicationContext(),"Requesting Log From Sana Mask");
-            Log.e(LOG_TAG,"Requesting Log From Sana Mask");
+            showMessage(getApplicationContext(),"Requesting Log From Device");
+            Log.e(LOG_TAG,"Requesting Log From Device");
 
             if(mService != null) mService.writeRXCharacteristic(value);
 			else showMessage(getApplicationContext(),"Requesting Log but Service Null");
 
-            CloseSanaFile(getApplicationContext());
+            CloseDataFile(getApplicationContext());
 
             ScheduleCreateLG = true;
 
@@ -517,6 +533,7 @@ public void InitGraphs()
 	btnConnectDisconnect = (Button) findViewById(R.id.btn_select);
 	//btnRequestData = (Button) findViewById(R.id.xmodem_vcfw_button);
 	btnActivities = (Button) findViewById(R.id.activities_button);
+	btnConfig = (Button) findViewById(R.id.config_button);
 	
 	// btnSend = (Button) findViewById(R.id.sendButton);
 	// edtMessage = (EditText) findViewById(R.id.sendText);
@@ -633,8 +650,17 @@ public void InitGraphs()
 	}
 	);
 
+		btnConfig.setOnClickListener(new View.OnClickListener()	{
+				@Override
+				public void onClick(View v) {
+					DialogFragment newFragment = new ConfigActivity();
+					newFragment.show(getFragmentManager(), "ConfigActivity");
+				}
+			}
+		);
 
-        // Handle Disconnect & Connect button
+
+		// Handle Disconnect & Connect button
         btnConnectDisconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -650,8 +676,8 @@ public void InitGraphs()
                 Intent newIntent = new Intent(MainActivity.this, com.mushin.muconnect.DeviceListActivity.class);
                 //Intent newIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                 startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
-                bGotSanaName = false;
-                SanaConnectionName="NOSANANAME";
+                bGotDeviceName = false;
+                DeviceConnectionName ="NODEVICENAME";
                     } else {
                         //Disconnect button pressed
                         if (mDevice != null) {
@@ -730,122 +756,122 @@ public void InitGraphs()
 
 
 
-    public static void createSanaFile(Context context, int Type, int SessionNumber) 
+    public static void createDataFile(Context context, int Type, int SessionNumber)
 {
 
         File dlDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File sanaDir = new File(dlDir, "SanaData");
+        File dataDir = new File(dlDir, "muShinData");
  
-        if (sanaDir.exists()) {
-            Log.e(LOG_TAG, "SanaData directory already exists");
+        if (dataDir.exists()) {
+            Log.e(LOG_TAG, "muShinData directory already exists");
         } else {
-            sanaDir.mkdirs();
-            Log.e(LOG_TAG, "SanaData directory created");
+            dataDir.mkdirs();
+            Log.e(LOG_TAG, "muShinData directory created");
         }
 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	String currentDateandTimeString = sdf.format(new Date());
-	String sanaModeStg;
+	String deviceModeStg;
 
-        boolean appendToSanaFile = false;
+        boolean appendToDataFile = false;
 
 	CSV_Filetype = Type;
 
 	if(Type == CF_ID_TYPE)		// Immediate Data
 	{
-		sanaFileName = "Sana_ID_";
+		dataFileName = "muShin_ID_";
 		
 	}
 	else if(Type == CF_DL_TYPE)	// Download from data area
 	{
-		sanaFileName = "Sana_DL_";
+		dataFileName = "muShin_DL_";
 	}
 	else if(Type == CF_LG_TYPE)	// Download from error/entry log
 	{
-		sanaFileName = "Sana_LG_";
+		dataFileName = "muShin_LG_";
 	}
 	else					// Unknown
 	{
-		sanaFileName = "Sana_UK_";
+		dataFileName = "muShin_UK_";
 	}
 
-	if(SanaMaskMode == 1)
-		sanaModeStg = "_HRV";
+	if(DeviceMode == 1)
+		deviceModeStg = "_HRV";
 	else
-		sanaModeStg = "_STD";
+		deviceModeStg = "_STD";
 
 	bDataHeader = false;
 
-	sanaFileName = sanaFileName + SanaConnectionName;
-	sanaFileName = sanaFileName + sanaModeStg;
-	sanaFileName = sanaFileName + "_"+String.format("%05d", SessionNumber).trim();
-	sanaFileName = sanaFileName + "_"+currentDateandTimeString+".csv";
+	dataFileName = dataFileName + DeviceConnectionName;
+	dataFileName = dataFileName + deviceModeStg;
+	dataFileName = dataFileName + "_"+String.format("%05d", SessionNumber).trim();
+	dataFileName = dataFileName + "_"+currentDateandTimeString+".csv";
 
-	 Log.e(LOG_TAG, "!! sanaFileName " + sanaFileName);
+	 Log.e(LOG_TAG, "!! dataFileName " + dataFileName);
 
-	CurrentFileName = sanaFileName;
-        mSanaFile = new File(sanaDir, sanaFileName);
+	CurrentFileName = dataFileName;
+        mDataFile = new File(dataDir, dataFileName);
 
 	if(FirstCreated)
 	{
 		FirstFileName = CurrentFileName;
-		FirstSanaFile = mSanaFile;
+		FirstDataFile = mDataFile;
 		FirstCreated = false;
 	}
 
         // If file does not exists, then create it
-        if (!mSanaFile.exists()) {
+        if (!mDataFile.exists()) {
             try{
-                if(!mSanaFile.createNewFile()) {
-                    Log.e(LOG_TAG, "Unable to create Sana file "+sanaFileName);
-                    mSanaFileWriter = null;
+                if(!mDataFile.createNewFile()) {
+                    Log.e(LOG_TAG, "Unable to create data file "+ dataFileName);
+                    mDataFileWriter = null;
                     return;
                 }
                 else {
-                    Log.e(LOG_TAG, "Sana file " + sanaFileName + " created");
-                    appendToSanaFile = false;
+                    Log.e(LOG_TAG, "Data file " + dataFileName + " created");
+                    appendToDataFile = false;
 
-			showMessage(context,"Creating "+sanaFileName);
+			showMessage(context,"Creating "+ dataFileName);
                 }
             }
             catch(IOException e) {
-				Log.e(LOG_TAG, "Sana file IOException");
+				Log.e(LOG_TAG, "Data file IOException");
                 e.printStackTrace();
-                mSanaFileWriter = null;
+                mDataFileWriter = null;
                 return;
             }
         }
         else {
-            Log.e(LOG_TAG, "Sana file "+sanaFileName+" already exists");
-            appendToSanaFile = true;
+            Log.e(LOG_TAG, "Data file "+ dataFileName +" already exists");
+            appendToDataFile = true;
         }
 
         try {
-            mSanaFileWriter = new FileWriter(mSanaFile.getAbsoluteFile(), appendToSanaFile);
+            mDataFileWriter = new FileWriter(mDataFile.getAbsoluteFile(), appendToDataFile);
         }
         catch(IOException e){
             e.printStackTrace();
-            mSanaFileWriter = null;
+            mDataFileWriter = null;
         }
 
         return;
      }
 
-	public static void CloseSanaFile(Context context )
+	public static void CloseDataFile(Context context )
 	{
 		Log.e(LOG_TAG, "Closing CSV file");
 
-		if (mSanaFileWriter != null) 
+		if (mDataFileWriter != null)
 		{
 			try {
 				showMessage(context, "Closing " + CurrentFileName);
 				Log.e(LOG_TAG, "Closing " + CurrentFileName);
-				mSanaFileWriter.flush();
-				mSanaFileWriter.close();
+				mDataFileWriter.flush();
+				mDataFileWriter.close();
 
-				addFileToDownloadManager(mSanaFile, CurrentFileName, "Sana CSV file", "text/plain", context);
+				addFileToDownloadManager(mDataFile, CurrentFileName, "muShin CSV file", "text/plain", context);
 
-				mSanaFileWriter = null;
+				mDataFileWriter = null;
 			} 
 			catch (Exception e) 
 			{
@@ -892,10 +918,10 @@ public void InitGraphs()
 
 		s_Connection_Number = ", CN: " +String.format("%d", Connection_Number);
 		
-		SanaSessionNumberString = "Session Number " +String.format("%d", SanaSessionNumber);
-		ComboFirmwareVersion = "Sana "+ SanaFirmwareVersion + ":" + SanaMaskStatusString +"\r\n" +"VCFW " + VCFWFirmwareVersion  + " " +SanaSessionNumberString
-			+ "\r\n" + SanaMaskModeString
-			+ "\r\n" + SanaErrorInfo + s_Connection_Number;
+		SessionNumberString = "Session Number " +String.format("%d", DeviceSessionNumber);
+		ComboFirmwareVersion = "muShin "+ DeviceFirmwareVersion + ":" + DeviceMaskStatusString +"\r\n" +"VCFW " + VCFWFirmwareVersion  + " " + SessionNumberString
+			+ "\r\n" + DeviceModeString
+			+ "\r\n" + DeviceErrorInfo + s_Connection_Number;
 		((TextView) findViewById(R.id.hrv_diff_box)).setText(ComboFirmwareVersion);
 		Log.e(LOG_TAG, "Version "+ComboFirmwareVersion);
 
@@ -940,8 +966,8 @@ public void InitGraphs()
 
 		if(ScheduleCreateDL)
 		{
-			Log.e(LOG_TAG, "*** DOING createSanaFile of DL ");
-			createSanaFile(getApplicationContext(), CF_DL_TYPE, SanaSessionNumber);
+			Log.e(LOG_TAG, "*** DOING createDataFile of DL ");
+			createDataFile(getApplicationContext(), CF_DL_TYPE, DeviceSessionNumber);
 			ScheduleCreateDL =  false;
 		}
 
@@ -951,12 +977,12 @@ public void InitGraphs()
 		currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
 
 		// Let's get this written before doing graphical update
-		if((mSanaFileWriter != null) && bGotSanaName)
+		if((mDataFileWriter != null) && bGotDeviceName)
 		{
 
 			// Create CSV string for output
-			TimeStampedData = SanaConnectionName + "," + currentDateTimeString + ","
-			+ String.valueOf(SanaSessionNumber) + ","
+			TimeStampedData = DeviceConnectionName + "," + currentDateTimeString + ","
+			+ String.valueOf(DeviceSessionNumber) + ","
 			+ String.format(" %d", RRITime)  
 			+ String.format(" ,%d", iHrData)  
 			+ String.format(" ,%d", NoOfRRI) 
@@ -984,7 +1010,7 @@ public void InitGraphs()
 				
 				try 
 				{
-					mSanaFileWriter.append(HeaderData);
+					mDataFileWriter.append(HeaderData);
 				}
 				catch (Exception e) {
 					Log.e(TAG, e.toString());
@@ -993,7 +1019,7 @@ public void InitGraphs()
 
 			try 
 			{
-				mSanaFileWriter.append(TimeStampedData);
+				mDataFileWriter.append(TimeStampedData);
 			}
 			catch (Exception e) {
 				Log.e(TAG, e.toString());
@@ -1004,10 +1030,10 @@ public void InitGraphs()
 		}
 		else 
 		{
-			if(!bGotSanaName)
-				Log.e(LOG_TAG,  "!bGotSanaName");
-			if(mSanaFileWriter == null)
-				Log.e(LOG_TAG,  "mSanaFileWriter == null");
+			if(!bGotDeviceName)
+				Log.e(LOG_TAG,  "!bGotDeviceName");
+			if(mDataFileWriter == null)
+				Log.e(LOG_TAG,  "mDataFileWriter == null");
 		}
 
 
@@ -1041,8 +1067,6 @@ public void InitGraphs()
 
 		HRVstg = "HRV"+ "-Current\r\n"+ currentDateTimeString;
 		((TextView) findViewById(R.id.hrv_right_box)).setText(HRVstg);
-
-		// Log.e(LOG_TAG, "bGotSanaName is "+String.format("%b, ", bGotSanaName));
 
 
 		// Scale SQ up to match HRV for graphing
@@ -1081,18 +1105,18 @@ public void InitGraphs()
 
 		if(ScheduleCreateLG)
 		{
-			Log.e(LOG_TAG, "*** DOING createSanaFile of LG ");
-			createSanaFile(getApplicationContext(), CF_LG_TYPE, SanaSessionNumber);
+			Log.e(LOG_TAG, "*** DOING createDataFile of LG ");
+			createDataFile(getApplicationContext(), CF_LG_TYPE, DeviceSessionNumber);
 			ScheduleCreateLG =  false;
 		}
 
 		currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
 
-		if((mSanaFileWriter != null) && bGotSanaName)
+		if((mDataFileWriter != null) && bGotDeviceName)
 		{
 
 			// Create CSV string for output
-			TimeStampedData = SanaConnectionName + "," + currentDateTimeString + "," 
+			TimeStampedData = DeviceConnectionName + "," + currentDateTimeString + ","
 			+ String.format(" %d", errorSessionID) + ","
 			+ String.format(" %d", errorEventCode) + ","
 			+ String.format(" %d", errorTimeSincePwrOn)  + ","
@@ -1109,7 +1133,7 @@ public void InitGraphs()
 				
 				try 
 				{
-					mSanaFileWriter.append(HeaderData);
+					mDataFileWriter.append(HeaderData);
 				}
 				catch (Exception e) {
 					Log.e(TAG, e.toString());
@@ -1118,7 +1142,7 @@ public void InitGraphs()
 
 			try 
 			{
-				mSanaFileWriter.append(TimeStampedData);
+				mDataFileWriter.append(TimeStampedData);
 			}
 			catch (Exception e) {
 				Log.e(TAG, e.toString());
@@ -1129,10 +1153,10 @@ public void InitGraphs()
 		}
 		else 
 		{
-			if(!bGotSanaName)
-				Log.e(LOG_TAG,  "!bGotSanaName");
-			if(mSanaFileWriter == null)
-				Log.e(LOG_TAG,  "mSanaFileWriter == null");
+			if(!bGotDeviceName)
+				Log.e(LOG_TAG,  "!bGotDeviceName");
+			if(mDataFileWriter == null)
+				Log.e(LOG_TAG,  "mDataFileWriter == null");
 		}
 	
 	}
@@ -1149,7 +1173,7 @@ public void InitGraphs()
 			 iHrvData[0] = 0;
 		}
 		
-		HRitem = SanaConnectionName + ": HRV = " + String.format(" %d", iHrvData[0]) + "   " + "HR = "
+		HRitem = DeviceConnectionName + ": HRV = " + String.format(" %d", iHrvData[0]) + "   " + "HR = "
 				+ String.format(" %d", iHrData) + "   " + "Q = " + String.format(" %d%%", iSignalQuality) + "\r\n"
 				+ LightSoundLevelStg + BatteryStg;
 
@@ -1200,8 +1224,6 @@ public void InitGraphs()
                         	 
                              mState = UART_PROFILE_CONNECTED;
 
-				// 
-				// if((!mSanaFile.exists) createSanaFile(getApplicationContext(), 0, SanaSessionNumber);
                      }
             	 });
             }
@@ -1229,7 +1251,7 @@ public void InitGraphs()
 				{
 					// Don't close a SendData or SendLog file
 					// until we get an HRVDONE or LOGDONE
-					CloseSanaFile(getApplicationContext());
+					CloseDataFile(getApplicationContext());
 				}
 
                             //setUiState();
@@ -1311,7 +1333,7 @@ public void InitGraphs()
                          	//String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
 				String HRVitem, HRitem, DiffItem;
 				String HexData;
-				int SanaPacketType;
+				int PacketType;
 				int nJdx;
 
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss");
@@ -1323,27 +1345,25 @@ public void InitGraphs()
 					HexData = HexData + String.format(" %02x", (txValue[nJdx] & 0xff));
 				}
 
-                           //  listAdapter.add("["+currentDateTimeString+"] RX-Sana: "+HexData);
-
 				Log.e(LOG_TAG, String.format("[%d]", HRVinputRecordNum) + "Input record is "+HexData);
 
 				HRVinputRecordNum++;
 
-				SanaPacketType = txValue[0] & 0xff;
+				PacketType = txValue[0] & 0xff;
 
-				Log.e(LOG_TAG, "SanaPacketType is "+String.format("%d, ", SanaPacketType));
+				Log.e(LOG_TAG, "PacketType is "+String.format("%d, ", PacketType));
 
-				if(SanaPacketType == SANA_PACKET_HRVDONE)
+				if(PacketType == PACKET_HRVDONE)
 				{
-					Log.e(LOG_TAG, "Got SANA_PACKET_HRVDONE, Closing file");
-					CloseSanaFile(getApplicationContext());
+					Log.e(LOG_TAG, "Got PACKET_HRVDONE, Closing file");
+					CloseDataFile(getApplicationContext());
 					bLogHeader = false;
 					bDataHeader = false;
 	               		 finalizeSendData();
 				}
-				else if(SanaPacketType == SANA_PACKET_HRVEND)
+				else if(PacketType == PACKET_PACKET_HRVEND)
 				{
-					Log.e(LOG_TAG, "Got SANA_PACKET_HRVEND, Doing SendData to Firmware");
+					Log.e(LOG_TAG, "Got PACKET_HRVEND, Doing SendData to Firmware");
 
 					if(NumRecsForThisSessionID == 0)
 					{
@@ -1376,100 +1396,96 @@ public void InitGraphs()
                     }
 
 				}
-				else if(SanaPacketType == SANA_SESSION_ID)
+				else if(PacketType == PACKET_SESSION_ID)
 				{
 
-					Log.e(LOG_TAG, "&&& Got SANA_SESSION_ID");
+					Log.e(LOG_TAG, "&&& Got PACKET_SESSION_ID");
 					
 					NumRecsForThisSessionID = 0;
 					
-					SanaSessionNumber 		= ( txValue[4] & 0xff) << 24 | (txValue[3] & 0xff) << 16 | ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
+					DeviceSessionNumber = ( txValue[4] & 0xff) << 24 | (txValue[3] & 0xff) << 16 | ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
 
-					if( bGotSanaName &&   (mSanaFileWriter == null)) 
+					if( bGotDeviceName &&   (mDataFileWriter == null))
 					{ 
-						if(!DoingSendData && !DoingSendLog) createSanaFile(getApplicationContext(), CF_ID_TYPE, SanaSessionNumber);
+						if(!DoingSendData && !DoingSendLog) createDataFile(getApplicationContext(), CF_ID_TYPE, DeviceSessionNumber);
 					}
  
 
-					// showMessage(getApplicationContext(), "SANA_SESSION_ID = " + String.format(" %d", SanaSessionNumber));
-					
-					Log.e(LOG_TAG, "[A]Sana Mask Name is "+SanaConnectionName);
+					Log.e(LOG_TAG, "[A]Device Name is "+ DeviceConnectionName);
 
-					Log.e(LOG_TAG, "[A]SanaSessionNumber is "+String.format("%d, ", SanaSessionNumber));
-
-					// Log.e(LOG_TAG, "[A]mSanaFileWriter is "+String.format("%x, ", mSanaFileWriter));
+					Log.e(LOG_TAG, "[A]DeviceSessionNumber is "+String.format("%d, ", DeviceSessionNumber));
 
 					UpdateInfoDisplayBlock();
 				 
 				}
-				else if(SanaPacketType == SANA_MASK_MODE)
+				else if(PacketType == PACKET_MASK_MODE)
 				{
 
-					Log.e(LOG_TAG, "&&& Got SANA_MASK_MODE");
+					Log.e(LOG_TAG, "&&& Got PACKET_MASK_MODE");
 					
-					SanaMaskMode 		= ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
+					DeviceMode = ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
 
-					SanaMaskModeString = "";
+					DeviceModeString = "";
 
-					if((SanaMaskMode &  STORED_MODE_CHANGEABLE_MASK) == STORED_MODE_CHANGEABLE_MASK)
-						SanaMaskModeString = SanaMaskModeString  + "Changeable";
+					if((DeviceMode &  STORED_MODE_CHANGEABLE_MASK) == STORED_MODE_CHANGEABLE_MASK)
+						DeviceModeString = DeviceModeString + "Changeable";
 					else 
-						SanaMaskModeString = SanaMaskModeString  + "UnChangeable";
+						DeviceModeString = DeviceModeString + "UnChangeable";
 
-					if((SanaMaskMode &  STORED_REAL_OR_SHAM_MASK) == STORED_REAL_OR_SHAM_MASK)
-						SanaMaskModeString = SanaMaskModeString + "," + "Real";
+					if((DeviceMode &  STORED_REAL_OR_SHAM_MASK) == STORED_REAL_OR_SHAM_MASK)
+						DeviceModeString = DeviceModeString + "," + "Real";
 					else 
-						SanaMaskModeString = SanaMaskModeString + "," + "Sham";
+						DeviceModeString = DeviceModeString + "," + "Sham";
 
-					if((SanaMaskMode &  STORED_APP_OR_NOAPP_MASK) == STORED_APP_OR_NOAPP_MASK)
-						SanaMaskModeString = SanaMaskModeString + "," + "App";
+					if((DeviceMode &  STORED_APP_OR_NOAPP_MASK) == STORED_APP_OR_NOAPP_MASK)
+						DeviceModeString = DeviceModeString + "," + "App";
 					else 
 					{
 						String message = "SCToken";
-						SanaMaskModeString = SanaMaskModeString + "," + "NoApp";
+						DeviceModeString = DeviceModeString + "," + "NoApp";
 						ButtonsActivity.writeMessage(message);
 					}
 					
-					if((SanaMaskMode &  STORED_STDBLE_OR_SECUREBLE_MASK) == STORED_STDBLE_OR_SECUREBLE_MASK)
-						SanaMaskModeString = SanaMaskModeString + "," + "StdBLE";
+					if((DeviceMode &  STORED_STDBLE_OR_SECUREBLE_MASK) == STORED_STDBLE_OR_SECUREBLE_MASK)
+						DeviceModeString = DeviceModeString + "," + "StdBLE";
 					else 
-						SanaMaskModeString = SanaMaskModeString + "," + "SecBLE";
+						DeviceModeString = DeviceModeString + "," + "SecBLE";
 
 					UpdateInfoDisplayBlock();
 				 
 				}
-				else if(SanaPacketType == SANA_MASK_STATUS)
+				else if(PacketType == PACKET_MASK_STATUS)
 				{
 
-					Log.e(LOG_TAG, "&&& Got SANA_MASK_STATUS");
+					Log.e(LOG_TAG, "&&& Got PACKET_MASK_STATUS");
 					
-					SanaMaskStatus 		= ( txValue[4] & 0xff) << 24 | (txValue[3] & 0xff) << 16 | ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
+					DeviceStatus = ( txValue[4] & 0xff) << 24 | (txValue[3] & 0xff) << 16 | ( txValue[2] & 0xff) << 8 | (txValue[1] & 0xff);
 
-					if(SanaMaskStatus == 0)
-						SanaMaskStatusString = "Status:PASS";
-					else if(SanaMaskStatus == VALENCELL_ERROR)
-						SanaMaskStatusString = "Error:VALENCELL";
-					else if(SanaMaskStatus == I2C_ERROR)
-						SanaMaskStatusString = "Error:I2C";
-					else if(SanaMaskStatus == VS1000_ERROR)
-						SanaMaskStatusString = "Error:VS1000";
-					else if(SanaMaskStatus == BATTERY_ERROR)
-						SanaMaskStatusString = "Error:BATTERY";
-					else if(SanaMaskStatus == SPI_ERROR)
-						SanaMaskStatusString = "Error:SPI";
-					else if(SanaMaskStatus == FLASH_ERROR)
-						SanaMaskStatusString = "Error:FLASH";
-					else if(SanaMaskStatus == TEST_ERROR)
-						SanaMaskStatusString = "Error:TEST";
+					if(DeviceStatus == 0)
+						DeviceMaskStatusString = "Status:PASS";
+					else if(DeviceStatus == VALENCELL_ERROR)
+						DeviceMaskStatusString = "Error:VALENCELL";
+					else if(DeviceStatus == I2C_ERROR)
+						DeviceMaskStatusString = "Error:I2C";
+					else if(DeviceStatus == VS1000_ERROR)
+						DeviceMaskStatusString = "Error:VS1000";
+					else if(DeviceStatus == BATTERY_ERROR)
+						DeviceMaskStatusString = "Error:BATTERY";
+					else if(DeviceStatus == SPI_ERROR)
+						DeviceMaskStatusString = "Error:SPI";
+					else if(DeviceStatus == FLASH_ERROR)
+						DeviceMaskStatusString = "Error:FLASH";
+					else if(DeviceStatus == TEST_ERROR)
+						DeviceMaskStatusString = "Error:TEST";
 
 					UpdateInfoDisplayBlock();
 				 
 				}
-				else if(SanaPacketType == SANA_SEND_VCFW_SIZE)
+				else if(PacketType == PACKET_SEND_VCFW_SIZE)
 				{
 					byte[] VCFW_Filelen = new byte[4];
 
-					Log.e(LOG_TAG, "&&& Got SANA_SEND_VCFW_SIZE");
+					Log.e(LOG_TAG, "&&& Got PACKET_SEND_VCFW_SIZE");
 
 					VCFW_Filelen[3] = (byte) ((BytesVCFWLen & 0xFF000000) >> 24);
 					VCFW_Filelen[2] = (byte) ((BytesVCFWLen & 0x00FF0000) >> 16);
@@ -1478,13 +1494,13 @@ public void InitGraphs()
 
 					String FileLenStg =  String.format(" %d", BytesVCFWLen) ;
 
-					showMessage(getApplicationContext(), "SANA_SEND_VCFW_SIZE: VC FW File Len = " + FileLenStg);
+					showMessage(getApplicationContext(), "PACKET_SEND_VCFW_SIZE: VC FW File Len = " + FileLenStg);
 
 					showMessage(getApplicationContext(),"Sending VC FW Len");
 
 					if(mService != null) mService.writeRXCharacteristic(VCFW_Filelen);
 				}
-				else if(SanaPacketType == SANA_VCFW_ACK)
+				else if(PacketType == PACKET_VCFW_ACK)
 				{
 					// We're going to send the file 16 bytes at a time, with checksum
 					byte[] VCFW_Packet = new byte[17];
@@ -1493,7 +1509,7 @@ public void InitGraphs()
 					int Percent;
 					String Msg;
 
-					Log.e(LOG_TAG, "&&& Got SANA_VCFW_ACK");
+					Log.e(LOG_TAG, "&&& Got PACKET_VCFW_ACK");
 
 					left = BytesVCFWLen - BytesVCFWSent;
 
@@ -1523,10 +1539,10 @@ public void InitGraphs()
 					((TextView) findViewById(R.id.HRtext)).setText(Msg);
 					
 				}
-				if(SanaPacketType == SANA_PACKET_CPS)
+				if(PacketType == PACKET_CPS)
 				{
 
-				Log.e(LOG_TAG, "&&& Got SANA_PACKET_CPS");
+				Log.e(LOG_TAG, "&&& Got PACKET_CPS");
 
 					// In C, the structure is
 					//
@@ -1549,12 +1565,12 @@ public void InitGraphs()
 				}
 				// Let's do this later
 				
-				else if(SanaPacketType == SANA_STOPPING)
+				else if(PacketType == PACKET_STOPPING)
 				{
 				int StopCodeNum 		= ( txValue[1] & 0xff);
 				StopCode = "SC="+String.format("%d",StopCodeNum);
 
-				Log.e(LOG_TAG, "&&& Got SANA_STOPPING");
+				Log.e(LOG_TAG, "&&& Got PACKET_STOPPING");
 				Log.e(LOG_TAG, StopCode);
 				
 				//	
@@ -1563,27 +1579,27 @@ public void InitGraphs()
 				//	((TextView) findViewById(R.id.HRtext)).setText(HRitem);
 				//
 				}
-				else if(SanaPacketType == SANA_FIRMWARE_VERSION)
+				else if(PacketType == PACKET_FIRMWARE_VERSION)
 				{
 					int nIdx;		
 
-					Log.e(LOG_TAG, "&&& Got SANA_FIRMWARE_VERSION");
+					Log.e(LOG_TAG, "&&& Got PACKET_FIRMWARE_VERSION");
 					
-					SanaFirmwareVersion = "";					
+					DeviceFirmwareVersion = "";
 					for(nIdx=1; nIdx < txValue.length; nIdx++)					
 						{						
 						if(txValue[nIdx] == 0x00) break;						
-						SanaFirmwareVersion = SanaFirmwareVersion + String.format("%c", txValue[nIdx]);					
+						DeviceFirmwareVersion = DeviceFirmwareVersion + String.format("%c", txValue[nIdx]);
 						}
 
 					UpdateInfoDisplayBlock();
 
 				}
-				else if(SanaPacketType == SANA_VCFW_VERSION)
+				else if(PacketType == PACKET_VCFW_VERSION)
 				{
 					int nIdx;	
 
-					Log.e(LOG_TAG, "&&& Got SANA_VCFW_VERSION");
+					Log.e(LOG_TAG, "&&& Got PACKET_VCFW_VERSION");
 					
 					VCFWFirmwareVersion = "";					
 					for(nIdx=1; nIdx < txValue.length; nIdx++)					
@@ -1596,11 +1612,11 @@ public void InitGraphs()
 
 				}
 
-				else if(SanaPacketType == SANA_MASK_STAGE)
+				else if(PacketType == PACKET_MASK_STAGE)
 				{
 					int nIdx;	
 
-					Log.e(LOG_TAG, "&&& Got SANA_MASK_STAGE");
+					Log.e(LOG_TAG, "&&& Got PACKET_MASK_STAGE");
 
 		
 					 s_num_program 	= ( txValue[1] & 0xff);						//which program is running 0-sleep 1-Nap 2-Relax
@@ -1613,14 +1629,14 @@ public void InitGraphs()
 
 				}
 					
-				else if(SanaPacketType == SANA_BATTERY_STATUS)
+				else if(PacketType == PACKET_BATTERY_STATUS)
 				{
 					GaugeLevel 		= ( txValue[1] & 0xff);
 					BatteryLow 		= ( txValue[2] & 0x01);
 					ChargerConnected	= ( txValue[2] & 0x02) >> 1;
 					Voltage			= ( txValue[4] & 0xff) << 8 | (txValue[3] & 0xff);
 
-					Log.e(LOG_TAG, "&&& Got SANA_BATTERY_STATUS");
+					Log.e(LOG_TAG, "&&& Got PACKET_BATTERY_STATUS");
 
 
 					BatteryStg = "Battery: "+ String.format("%3d", GaugeLevel) + "%" + " " + String.format("%4d",Voltage )+ "mV";
@@ -1632,14 +1648,14 @@ public void InitGraphs()
 					UpdateStatusDisplayBlock();
 			
 				}
-				else if(SanaPacketType == SANA_LIGHT_SOUND_LEVELS)
+				else if(PacketType == PACKET_LIGHT_SOUND_LEVELS)
 				{
 					LightLevel 		= ( txValue[1] & 0xff);
 					SoundLevel 		= ( txValue[2] & 0xff);
 
 					if(SoundLevel >127) SoundLevel = -(256 - SoundLevel);
 
-					Log.e(LOG_TAG, "&&& Got SANA_LIGHT_SOUND_LEVELS");
+					Log.e(LOG_TAG, "&&& Got PACKET_LIGHT_SOUND_LEVELS");
 
 
 					LightSoundLevelStg = "Lights: "+ String.format("%2d", LightLevel) + " " + "Sound: "+ String.format("%2d ", SoundLevel);
@@ -1649,62 +1665,60 @@ public void InitGraphs()
 					UpdateStatusDisplayBlock();
 			
 				}
-				else if(SanaPacketType == SANA_PACKET_SANANAME)
+				else if(PacketType == PACKET_DEVICE_NAME)
 				{
 					int nIdx;
 
-					Log.e(LOG_TAG, "&&& Got SANA_PACKET_SANANAME");
+					Log.e(LOG_TAG, "&&& Got PACKET_DEVICE_NAME");
 
-					SanaConnectionName = "";
+					DeviceConnectionName = "";
 					for(nIdx=1; nIdx < txValue.length; nIdx++)
 					{
 						if(txValue[nIdx] == 0x00) break;
-						SanaConnectionName = SanaConnectionName + String.format("%c", txValue[nIdx]);
+						DeviceConnectionName = DeviceConnectionName + String.format("%c", txValue[nIdx]);
 					}
 					
-					bGotSanaName = true;
+					bGotDeviceName = true;
 
-					Log.e(LOG_TAG, "[B] Sana Mask Name is "+SanaConnectionName);
+					Log.e(LOG_TAG, "[B] Device Mask Name is "+ DeviceConnectionName);
 
-					Log.e(LOG_TAG, "[B] SanaSessionNumber is "+String.format("%d, ", SanaSessionNumber));
+					Log.e(LOG_TAG, "[B] DeviceSessionNumber is "+String.format("%d, ", DeviceSessionNumber));
 
-					// Log.e(LOG_TAG, "[B] mSanaFileWriter is "+String.format("%x, ", mSanaFileWriter));
-
-					if((SanaSessionNumber != -1) &&  (mSanaFileWriter ==null)) 
+					if((DeviceSessionNumber != -1) &&  (mDataFileWriter ==null))
 					{ 
-						if(!DoingSendData && !DoingSendLog) createSanaFile(getApplicationContext(), CF_ID_TYPE, SanaSessionNumber);
+						if(!DoingSendData && !DoingSendLog) createDataFile(getApplicationContext(), CF_ID_TYPE, DeviceSessionNumber);
 					}
 
 					UpdateInfoDisplayBlock();
 						
 				}
 
-				else if(SanaPacketType == SANA_ERROR_INFO)
+				else if(PacketType == PACKET_ERROR_INFO)
 				{
 					int nIdx;
 
-					Log.e(LOG_TAG, "&&& Got SANA_ERROR_INFO");
+					Log.e(LOG_TAG, "&&& Got PACKET_ERROR_INFO");
 
-					SanaErrorInfo = "";
+					DeviceErrorInfo = "";
 					for(nIdx=1; nIdx < txValue.length; nIdx++)
 					{
 						if(txValue[nIdx] == 0x00) break;
-						SanaErrorInfo = SanaErrorInfo + String.format("%c", txValue[nIdx]);
+						DeviceErrorInfo = DeviceErrorInfo + String.format("%c", txValue[nIdx]);
 					}
 					
-					bGotSanaName = true;
+					bGotDeviceName = true;
 
-					Log.e(LOG_TAG, "[B] SANA_ERROR_INFO is "+SanaErrorInfo);	
+					Log.e(LOG_TAG, "[B] PACKET_ERROR_INFO is "+ DeviceErrorInfo);
 
 					UpdateInfoDisplayBlock();
 				}
 
-				else if(SanaPacketType == SANA_EVENT_ONE)
+				else if(PacketType == PACKET_EVENT_ONE)
 				{
-					Log.e(LOG_TAG, "&&& Got SANA_EVENT_ONE");
+					Log.e(LOG_TAG, "&&& Got PACKET_EVENT_ONE");
 
 
-					// Extract Sana Mask Values
+					// Extract Values
 					// In C, the structure is
 					//
 					//	typedef struct __attribute__((packed))
@@ -1725,15 +1739,15 @@ public void InitGraphs()
 	
 	                      }
 
-				else if(SanaPacketType == SANA_EVENT_TWO)
+				else if(PacketType == PACKET_EVENT_TWO)
 				{
 
 					int nIdx;
 
-					Log.e(LOG_TAG, "&&& Got SANA_EVENT_TWO");
+					Log.e(LOG_TAG, "&&& Got PACKET_EVENT_TWO");
 
 
-					// Extract Sana Mask Values
+					// Extract Values
 					// In C, the structure is
 					//
 					//	typedef struct __attribute__((packed))
@@ -1757,16 +1771,13 @@ public void InitGraphs()
 
 	                      }
 				
-				else if(SanaPacketType == SANA_PACKET_HRVDATA)
+				else if(PacketType == PACKET_HRVDATA)
 				{
-					Log.e(LOG_TAG, "&&& Got SANA_PACKET_HRVDATA");
+					Log.e(LOG_TAG, "&&& Got PACKET_HRVDATA");
 
 					NumRecsForThisSessionID++;
 
-
-					//int receivedSessionId = (sendDataParameters != null) ? sendDataParameters.currentSession : SanaSessionNumber;
-
-					// Extract Sana Mask Values
+					// Extract Values
 					// In C, the structure is
 					//
 					//typedef struct
@@ -1845,7 +1856,7 @@ public void InitGraphs()
     	 super.onDestroy();
         Log.d(TAG, "onDestroy()");
 		
-	CloseSanaFile(getApplicationContext());
+	CloseDataFile(getApplicationContext());
 
         try {
         	LocalBroadcastManager.getInstance(this).unregisterReceiver(UARTStatusChangeReceiver);
@@ -2052,7 +2063,7 @@ public static String getDataColumn(Context context, Uri uri, String selection, S
             startMain.addCategory(Intent.CATEGORY_HOME);
             startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(startMain);
-            showMessage(getApplicationContext(),"SANA Display is running in background.\n             Disconnect to exit");
+            showMessage(getApplicationContext(),"muConnect is running in background.\n             Disconnect to exit");
         }
         else {
             new AlertDialog.Builder(this)

@@ -161,6 +161,14 @@
         android:textSize="12sp"
         android:text="Activities" />
 
+    <Button
+        android:id="@+id/config_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Config" />
+
+
     </LinearLayout>
 
 </LinearLayout>

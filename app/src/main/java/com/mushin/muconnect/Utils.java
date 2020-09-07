@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import static android.content.Context.MODE_PRIVATE;
 
 class Utils {
-    static private final String preferenceName = "com.sanahealth.SanaMaskv3.appPreferences";
+    static private final String preferenceName = "com.mushin.muconnect.appPreferences";
     static void setPreference(Context context, String name, boolean value) {
         SharedPreferences preferences = context.getSharedPreferences(preferenceName, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();

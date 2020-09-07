@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 
 public class ButtonsActivity extends DialogFragment {
 
-    private static final String LOG_TAG = "SANA_BLE";
+    private static final String LOG_TAG = "MUSHIN_BLE";
     private static final int REQUEST_FILE_SELECT = 3;
 
 	public static boolean AutoSessionOn = false;
@@ -82,7 +82,7 @@ public class ButtonsActivity extends DialogFragment {
                     @Override
                     public void execute(String str1, String str2) {
 
-                        showMessage("Requesting Data From Sana Mask");
+                        showMessage("Requesting Data From Device");
 
                         int fromSession = Integer.parseInt(str1);
                         int toSession = Integer.parseInt(str2);
@@ -90,16 +90,16 @@ public class ButtonsActivity extends DialogFragment {
 
                         Log.e(LOG_TAG," *** Deleting "+com.mushin.muconnect.MainActivity.FirstFileName);
 
-			if(com.mushin.muconnect.MainActivity.FirstSanaFile == null)
+			if(com.mushin.muconnect.MainActivity.FirstDataFile == null)
 			{
 				Log.e(LOG_TAG, "Nothing to delete");
 			}
 			else
 			{
-				if(com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
+				if(com.mushin.muconnect.MainActivity.FirstDataFile.exists())
 				{
-					com.mushin.muconnect.MainActivity.FirstSanaFile.delete();
-					if (com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
+					com.mushin.muconnect.MainActivity.FirstDataFile.delete();
+					if (com.mushin.muconnect.MainActivity.FirstDataFile.exists())
 					{
 						Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't get deleted");
 					}
@@ -141,7 +141,7 @@ public class ButtonsActivity extends DialogFragment {
                     @Override
                     public void execute(String str1, String str2) {
 
-                        showMessage("Requesting Log From Sana Mask");
+                        showMessage("Requesting Log From Device");
 
                         int fromSession = Integer.parseInt(str1);
                         int toSession = Integer.parseInt(str2);
@@ -149,16 +149,16 @@ public class ButtonsActivity extends DialogFragment {
 
                         Log.e(LOG_TAG," *** Deleting "+com.mushin.muconnect.MainActivity.FirstFileName);
 
-			if(com.mushin.muconnect.MainActivity.FirstSanaFile == null)
+			if(com.mushin.muconnect.MainActivity.FirstDataFile == null)
 			{
 				Log.e(LOG_TAG, "Nothing to delete");
 			}
 			else
 			{
-				if(com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
+				if(com.mushin.muconnect.MainActivity.FirstDataFile.exists())
 				{
-					com.mushin.muconnect.MainActivity.FirstSanaFile.delete();
-					if (com.mushin.muconnect.MainActivity.FirstSanaFile.exists())
+					com.mushin.muconnect.MainActivity.FirstDataFile.delete();
+					if (com.mushin.muconnect.MainActivity.FirstDataFile.exists())
 					{
 						Log.e(LOG_TAG, "*** [A] " + com.mushin.muconnect.MainActivity.FirstFileName + "didn't get deleted");
 					}

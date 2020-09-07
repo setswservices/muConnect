@@ -21,7 +21,7 @@
   -->
 <resources>
 
-    <string name="app_name">Sana Connect - Version 2.9T</string>
+    <string name="app_name">muShin - Version 0.1</string>
     <string name="device">Device:</string>
     <string name="no_device">&lt;Select a device&gt;</string>
     <string name="select_device">Select a device</string>
@@ -60,7 +60,7 @@
     <string name="Readdummy">D Read</string>
     <string name="removeBond">Remove Bond</string>
     <string name="paired">paired</string>
-    <string name="popup_title">Quit SANA Display</string>
+    <string name="popup_title">Quit muConnect</string>
     <string name="popup_message">Do you want to quit this Application?</string>
     <string name="popup_yes">YES</string>
     <string name="popup_no">NO</string>
@@ -70,5 +70,32 @@
     <string name="title_activity_buttons">ButtonsActivity</string>
 
     <string name="use_generated_passcode">Use generated passcode .....</string>
+
+    <string name="cranks">Cranks</string>
+    <string name="left_crank_data">Left Crank Data</string>
+    <string name="right_crank_data">Right Crank Data</string>
+    <string name="raw_data_threshold">Raw Data Threshold</string>
+    <string name="filtered_data_threshold">Filtered Data Threshold</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="send_data_for_x_axis">Send data for X axis</string>
+    <string name="send_data_for_y_axis">Send data for Y axis</string>
+    <string name="send_data_for_z_axis">Send data for Z axis</string>
+    <string name="send_raw_data_for_all_axises">Send raw data for all axises</string>
+    <string name="send_raw_data_for_x_axis">Send raw data for X axis</string>
+    <string name="send_raw_data_for_y_axis">Send raw data for Y axis</string>
+    <string name="send_raw_data_for_z_axis">Send raw data for Z axis</string>
+    <string name="enable_x_axis_filter">Enable X axis filter</string>
+    <string name="enable_y_axis_filter">Enable Y axis filter</string>
+    <string name="enable_z_axis_filter">Enable Z axis filter</string>
+    <string name="x_axis_filtered_data_threshold">X Axis Filtered Data Threshold</string>
+    <string name="y_axis_filtered_data_threshold">Y Axis Filtered Data Threshold</string>
+    <string name="z_axis_filtered_data_threshold">Z Axis Filtered Data Threshold</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="send_temperature_data">Send temperature data</string>
+    <string name="other">Other</string>
+    <string name="interval_between_data_transmissions">Interval between data transmissions</string>
+    <string name="configuration">Configuration</string>
+    <string name="ok">OK</string>
+    <string name="send_filtered_data">Send Filtered Data</string>
 
 </resources>

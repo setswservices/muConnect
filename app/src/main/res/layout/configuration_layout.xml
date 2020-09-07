@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="cfg"
+            type="com.mushin.muconnect.Configuration" />
+
+        <variable
+            name="activity"
+            type="com.mushin.muconnect.ConfigActivity" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0"
+            android:shrinkColumns="0">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#a9a9a9">
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:layout_span="2"
+                    android:text="@string/configuration"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="30sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/CategoryText"
+                    android:text="@string/cranks" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch1"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.leftCrankDataEnabled}"
+                    android:text="@string/left_crank_data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch2"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.rightCrankDataEnabled}"
+                    android:text="@string/right_crank_data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch25"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.crankDataFilterEnabled}"
+                    android:text="@string/send_filtered_data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editCrankRawDataThreshold"
+                    android:text="@string/raw_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editCrankRawDataThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.crankRawThreshold}" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editCrankFilteredDataThreshold"
+                    android:text="@string/filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editCrankFilteredDataThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.crankFilteredThreshold}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/CategoryText"
+                    android:text="@string/accelerometer" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch4"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accXDataEnabled}"
+                    android:text="@string/send_data_for_x_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch5"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accYDataEnabled}"
+                    android:text="@string/send_data_for_y_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch6"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accZDataEnabled}"
+                    android:text="@string/send_data_for_z_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch7"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accRawDataEnabled}"
+                    android:text="@string/send_raw_data_for_all_axises" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch8"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accRawXDataEnabled}"
+                    android:text="@string/send_raw_data_for_x_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch9"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accRawYDataEnabled}"
+                    android:text="@string/send_raw_data_for_y_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch10"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accRawZDataEnabled}"
+                    android:text="@string/send_raw_data_for_z_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch11"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accXDataFilterEnabled}"
+                    android:text="@string/enable_x_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch12"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accYDataFilterEnabled}"
+                    android:text="@string/enable_y_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch13"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.accZDataFilterEnabled}"
+                    android:text="@string/enable_z_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/LabelText"
+                    android:ellipsize="none"
+                    android:labelFor="@id/editAccXFilterThreshold"
+                    android:maxLines="3"
+                    android:scrollHorizontally="false"
+                    android:text="@string/x_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editAccXFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.accXFilteredThreshold}" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editAccYFilterThreshold"
+                    android:text="@string/y_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editAccYFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.accYFilteredThreshold}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editAccZFilterThreshold"
+                    android:text="@string/z_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editAccZFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.accZFilteredThreshold}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/CategoryText"
+                    android:text="@string/gyroscope" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch14"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroXDataEnabled}"
+                    android:text="@string/send_data_for_x_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch15"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroYDataEnabled}"
+                    android:text="@string/send_data_for_y_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch16"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroZDataEnabled}"
+                    android:text="@string/send_data_for_z_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch17"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroRawDataEnabled}"
+                    android:text="@string/send_raw_data_for_all_axises" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch18"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroRawXDataEnabled}"
+                    android:text="@string/send_raw_data_for_x_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch19"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroRawYDataEnabled}"
+                    android:text="@string/send_raw_data_for_y_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch20"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroRawZDataEnabled}"
+                    android:text="@string/send_raw_data_for_z_axis" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch21"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroXDataFilterEnabled}"
+                    android:text="@string/enable_x_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch22"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroYDataFilterEnabled}"
+                    android:text="@string/enable_y_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch23"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.gyroZDataFilterEnabled}"
+                    android:text="@string/enable_z_axis_filter" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/LabelText"
+                    android:ellipsize="none"
+                    android:labelFor="@id/editGyroXFilterThreshold"
+                    android:maxLines="3"
+                    android:scrollHorizontally="false"
+                    android:text="@string/x_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editGyroXFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.gyroXFilteredThreshold}" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editGyroYFilterThreshold"
+                    android:text="@string/y_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editGyroYFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.gyroYFilteredThreshold}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editGyroZFilterThreshold"
+                    android:text="@string/z_axis_filtered_data_threshold" />
+
+                <EditText
+                    android:id="@+id/editGyroZFilterThreshold"
+                    style="@style/InputText"
+                    android:inputType="numberDecimal"
+                    android:text="@={cfg.gyroZFilteredThreshold}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/CategoryText"
+                    android:text="@string/other" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    android:id="@+id/switch24"
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.temperatureDataEnabled}"
+                    android:text="@string/send_temperature_data" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    style="@style/LabelText"
+                    android:labelFor="@id/editIntervalMs"
+                    android:text="@string/interval_between_data_transmissions" />
+
+                <EditText
+                    android:id="@+id/editIntervalMs"
+                    style="@style/InputText"
+                    android:inputType="number"
+                    android:text="@={cfg.dataInterval}" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_span="2">
+
+                    <Button
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:text="@string/ok"
+                        android:onClick="@{() -> activity.onOkButton()}"/>
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/cancel"
+                        android:onClick="@{() -> activity.onCancelButton()}"/>
+
+                </LinearLayout>
+
+            </TableRow>
+
+        </TableLayout>
+
+    </ScrollView>
+</layout>
