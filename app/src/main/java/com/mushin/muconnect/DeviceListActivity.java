@@ -32,19 +32,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -58,7 +53,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DeviceListActivity extends Activity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+public class DeviceListActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
 
    // private BluetoothAdapter mBtAdapter;
@@ -82,11 +81,9 @@ public class DeviceListActivity extends Activity {
     	
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_bar);
+
         setContentView(R.layout.device_list);
-        android.view.WindowManager.LayoutParams layoutParams = this.getWindow().getAttributes();
-        layoutParams.gravity=Gravity.TOP;
-        layoutParams.y = 200;
+
         mHandler = new Handler();
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -94,6 +91,8 @@ public class DeviceListActivity extends Activity {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
@@ -169,7 +168,7 @@ public class DeviceListActivity extends Activity {
         newDevicesListView.setAdapter(deviceAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-           scanLeDevice(true);
+        scanLeDevice(true);
 
     }
     
@@ -199,16 +198,15 @@ public class DeviceListActivity extends Activity {
 
     }
 
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
+    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                	
-                              addDevice(device,rssi);
+
+                    addDevice(device, rssi);
                 }
             });
         }
@@ -229,10 +227,7 @@ public class DeviceListActivity extends Activity {
         if (!deviceFound) {
         	deviceList.add(device);
             mEmptyList.setVisibility(View.GONE);
-                 	
-        	
 
-            
             deviceAdapter.notifyDataSetChanged();
         }
     }
@@ -269,6 +264,7 @@ public class DeviceListActivity extends Activity {
   
             Bundle b = new Bundle();
             b.putString(BluetoothDevice.EXTRA_DEVICE, deviceList.get(position).getAddress());
+            b.putString(BluetoothDevice.EXTRA_NAME, deviceList.get(position).getName());
 
             Intent result = new Intent();
             result.putExtras(b);
@@ -342,20 +338,13 @@ public class DeviceListActivity extends Activity {
             tvadd.setText(device.getAddress());
             if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
                 Log.i(TAG, "device::"+device.getName());
-                tvname.setTextColor(Color.WHITE);
-                tvadd.setTextColor(Color.WHITE);
-                tvpaired.setTextColor(Color.GRAY);
                 tvpaired.setVisibility(View.VISIBLE);
                 tvpaired.setText(R.string.paired);
                 tvrssi.setVisibility(View.VISIBLE);
-                tvrssi.setTextColor(Color.WHITE);
-                
+
             } else {
-                tvname.setTextColor(Color.WHITE);
-                tvadd.setTextColor(Color.WHITE);
                 tvpaired.setVisibility(View.GONE);
                 tvrssi.setVisibility(View.VISIBLE);
-                tvrssi.setTextColor(Color.WHITE);
             }
             return vg;
         }

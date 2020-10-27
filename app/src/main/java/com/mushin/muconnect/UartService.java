@@ -280,9 +280,10 @@ public class UartService extends Service {
 
         // This is handling for the notification on TX Character of NUS service
         if (TX_CHAR_UUID.equals(characteristic.getUuid())) {
-        	
-           // Log.d(TAG, String.format("Received TX: %d",characteristic.getValue() ));
-            intent.putExtra(EXTRA_DATA, characteristic.getValue());
+
+            String data = new String(characteristic.getValue());
+            Log.d(TAG, String.format("Received TX: %s", data ));
+            intent.putExtra(EXTRA_DATA, data);
         } else {
         	
         }
@@ -379,22 +380,22 @@ public class UartService extends Service {
         }
 
         int bondState = device.getBondState();
-        if (bondState == BluetoothDevice.BOND_NONE) {
-            Log.e(TAG, "*** Device not bonded: bonding");
-            mConnectionState = STATE_BONDING;
-            device.createBond();
-        } else {
-            mBluetoothDeviceAddress = address;
-
-            if (mBluetoothGatt != null) {
-                mBluetoothGatt.close();
-
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+//        if (bondState == BluetoothDevice.BOND_NONE) {
+//            Log.e(TAG, "*** Device not bonded: bonding");
+//            mConnectionState = STATE_BONDING;
+//            device.createBond();
+//        } else {
+//            mBluetoothDeviceAddress = address;
+//
+//            if (mBluetoothGatt != null) {
+//                mBluetoothGatt.close();
+//
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             // We want to directly connect to the device, so we are setting the autoConnect
             // parameter to false.
@@ -410,7 +411,7 @@ public class UartService extends Service {
 
             Log.d(TAG, "************ Trying to create a new connection.");
             mConnectionState = STATE_CONNECTING;
-        }
+//        }
 
         return true;
     }

@@ -1,6 +1,7 @@
 package com.mushin.muconnect;
 
 public class DeviceCommand {
+    public static String Start = "START";
     public static String Stop = "STOP";
     public static String Resume = "RESUME";
     public static String Sleep = "SLEEP";

@@ -50,8 +50,8 @@ public class Configuration extends BaseObservable {
     private float gyroYFilteredThreshold = 0;
     private float gyroZFilteredThreshold = 0;
 
-    public Configuration copy(Configuration other) {
-        Configuration result = new Configuration();
+    public Configuration copyFrom(Configuration other) {
+        Configuration result = this;
 
         result.dataInterval = other.getDataInterval();
         result.temperatureDataEnabled = other.isTemperatureDataEnabled();
@@ -239,7 +239,7 @@ public class Configuration extends BaseObservable {
 
     public void setLeftCrankDataEnabled(boolean leftCrankDataEnabled) {
         this.leftCrankDataEnabled = leftCrankDataEnabled;
-        notifyPropertyChanged(BR.leftCrankDataEnabled);
+//        notifyPropertyChanged(BR.leftCrankDataEnabled);
     }
 
     @Bindable
@@ -249,7 +249,7 @@ public class Configuration extends BaseObservable {
 
     public void setDataInterval(int dataInterval) {
         this.dataInterval = dataInterval;
-        notifyPropertyChanged(BR.dataInterval);
+//        notifyPropertyChanged(BR.dataInterval);
     }
 
     @Bindable
@@ -259,7 +259,7 @@ public class Configuration extends BaseObservable {
 
     public void setTemperatureDataEnabled(boolean temperatureDataEnabled) {
         this.temperatureDataEnabled = temperatureDataEnabled;
-        notifyPropertyChanged(BR.temperatureDataEnabled);
+//        notifyPropertyChanged(BR.temperatureDataEnabled);
     }
 
     @Bindable
@@ -269,7 +269,7 @@ public class Configuration extends BaseObservable {
 
     public void setRightCrankDataEnabled(boolean rightCrankDataEnabled) {
         this.rightCrankDataEnabled = rightCrankDataEnabled;
-        notifyPropertyChanged(BR.rightCrankDataEnabled);
+//        notifyPropertyChanged(BR.rightCrankDataEnabled);
     }
 
     @Bindable
@@ -279,7 +279,7 @@ public class Configuration extends BaseObservable {
 
     public void setCrankDataFilterEnabled(boolean crankDataFilterEnabled) {
         this.crankDataFilterEnabled = crankDataFilterEnabled;
-        notifyPropertyChanged(BR.crankDataFilterEnabled);
+//        notifyPropertyChanged(BR.crankDataFilterEnabled);
     }
 
     @Bindable
@@ -289,7 +289,7 @@ public class Configuration extends BaseObservable {
 
     public void setCrankRawThreshold(float crankRawThreshold) {
         this.crankRawThreshold = crankRawThreshold;
-        notifyPropertyChanged(BR.crankRawThreshold);
+//            notifyPropertyChanged(BR.crankRawThreshold);
     }
 
     @Bindable
@@ -299,7 +299,7 @@ public class Configuration extends BaseObservable {
 
     public void setCrankFilteredThreshold(float crankFilteredThreshold) {
         this.crankFilteredThreshold = crankFilteredThreshold;
-        notifyPropertyChanged(BR.crankFilteredThreshold);
+//        notifyPropertyChanged(BR.crankFilteredThreshold);
     }
 
     @Bindable
@@ -309,7 +309,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccXDataEnabled(boolean accXDataEnabled) {
         this.accXDataEnabled = accXDataEnabled;
-        notifyPropertyChanged(BR.accXDataEnabled);
+//        notifyPropertyChanged(BR.accXDataEnabled);
     }
 
     @Bindable
@@ -319,7 +319,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccYDataEnabled(boolean accYDataEnabled) {
         this.accYDataEnabled = accYDataEnabled;
-        notifyPropertyChanged(BR.accYDataEnabled);
+//        notifyPropertyChanged(BR.accYDataEnabled);
     }
 
     @Bindable
@@ -329,7 +329,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccZDataEnabled(boolean accZDataEnabled) {
         this.accZDataEnabled = accZDataEnabled;
-        notifyPropertyChanged(BR.accZDataEnabled);
+//        notifyPropertyChanged(BR.accZDataEnabled);
     }
 
     @Bindable
@@ -339,7 +339,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccRawDataEnabled(boolean accRawDataEnabled) {
         this.accRawDataEnabled = accRawDataEnabled;
-        notifyPropertyChanged(BR.accRawDataEnabled);
+//        notifyPropertyChanged(BR.accRawDataEnabled);
     }
 
     @Bindable
@@ -349,7 +349,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccRawXDataEnabled(boolean accRawXDataEnabled) {
         this.accRawXDataEnabled = accRawXDataEnabled;
-        notifyPropertyChanged(BR.accRawXDataEnabled);
+//        notifyPropertyChanged(BR.accRawXDataEnabled);
     }
 
     @Bindable
@@ -359,7 +359,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccRawYDataEnabled(boolean accRawYDataEnabled) {
         this.accRawYDataEnabled = accRawYDataEnabled;
-        notifyPropertyChanged(BR.accRawYDataEnabled);
+//        notifyPropertyChanged(BR.accRawYDataEnabled);
     }
 
     @Bindable
@@ -369,7 +369,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccRawZDataEnabled(boolean accRawZDataEnabled) {
         this.accRawZDataEnabled = accRawZDataEnabled;
-        notifyPropertyChanged(BR.accRawZDataEnabled);
+//        notifyPropertyChanged(BR.accRawZDataEnabled);
     }
 
     @Bindable
@@ -379,7 +379,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccXDataFilterEnabled(boolean accXDataFilterEnabled) {
         this.accXDataFilterEnabled = accXDataFilterEnabled;
-        notifyPropertyChanged(BR.accXDataFilterEnabled);
+//        notifyPropertyChanged(BR.accXDataFilterEnabled);
     }
 
     @Bindable
@@ -389,7 +389,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccYDataFilterEnabled(boolean accYDataFilterEnabled) {
         this.accYDataFilterEnabled = accYDataFilterEnabled;
-        notifyPropertyChanged(BR.accYDataFilterEnabled);
+//        notifyPropertyChanged(BR.accYDataFilterEnabled);
     }
 
     @Bindable
@@ -399,7 +399,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccZDataFilterEnabled(boolean accZDataFilterEnabled) {
         this.accZDataFilterEnabled = accZDataFilterEnabled;
-        notifyPropertyChanged(BR.accZDataFilterEnabled);
+//        notifyPropertyChanged(BR.accZDataFilterEnabled);
     }
 
     @Bindable
@@ -409,7 +409,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccXFilteredThreshold(float accXFilteredThreshold) {
         this.accXFilteredThreshold = accXFilteredThreshold;
-        notifyPropertyChanged(BR.accXFilteredThreshold);
+//        notifyPropertyChanged(BR.accXFilteredThreshold);
     }
 
     @Bindable
@@ -419,7 +419,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccYFilteredThreshold(float accYFilteredThreshold) {
         this.accYFilteredThreshold = accYFilteredThreshold;
-        notifyPropertyChanged(BR.accYFilteredThreshold);
+//        notifyPropertyChanged(BR.accYFilteredThreshold);
     }
 
     @Bindable
@@ -429,7 +429,7 @@ public class Configuration extends BaseObservable {
 
     public void setAccZFilteredThreshold(float accZFilteredThreshold) {
         this.accZFilteredThreshold = accZFilteredThreshold;
-        notifyPropertyChanged(BR.accZFilteredThreshold);
+//        notifyPropertyChanged(BR.accZFilteredThreshold);
     }
 
     @Bindable
@@ -439,7 +439,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroXDataEnabled(boolean gyroXDataEnabled) {
         this.gyroXDataEnabled = gyroXDataEnabled;
-        notifyPropertyChanged(BR.gyroXDataEnabled);
+//        notifyPropertyChanged(BR.gyroXDataEnabled);
     }
 
     @Bindable
@@ -449,7 +449,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroYDataEnabled(boolean gyroYDataEnabled) {
         this.gyroYDataEnabled = gyroYDataEnabled;
-        notifyPropertyChanged(BR.gyroYDataEnabled);
+//        notifyPropertyChanged(BR.gyroYDataEnabled);
     }
 
     @Bindable
@@ -459,7 +459,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroZDataEnabled(boolean gyroZDataEnabled) {
         this.gyroZDataEnabled = gyroZDataEnabled;
-        notifyPropertyChanged(BR.gyroZDataEnabled);
+//        notifyPropertyChanged(BR.gyroZDataEnabled);
     }
 
     @Bindable
@@ -469,7 +469,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroRawDataEnabled(boolean gyroRawDataEnabled) {
         this.gyroRawDataEnabled = gyroRawDataEnabled;
-        notifyPropertyChanged(BR.gyroRawDataEnabled);
+//        notifyPropertyChanged(BR.gyroRawDataEnabled);
     }
 
     @Bindable
@@ -479,7 +479,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroRawXDataEnabled(boolean gyroRawXDataEnabled) {
         this.gyroRawXDataEnabled = gyroRawXDataEnabled;
-        notifyPropertyChanged(BR.gyroRawXDataEnabled);
+//        notifyPropertyChanged(BR.gyroRawXDataEnabled);
     }
 
     @Bindable
@@ -489,7 +489,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroRawYDataEnabled(boolean gyroRawYDataEnabled) {
         this.gyroRawYDataEnabled = gyroRawYDataEnabled;
-        notifyPropertyChanged(BR.gyroRawYDataEnabled);
+//        notifyPropertyChanged(BR.gyroRawYDataEnabled);
     }
 
     @Bindable
@@ -499,7 +499,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroRawZDataEnabled(boolean gyroRawZDataEnabled) {
         this.gyroRawZDataEnabled = gyroRawZDataEnabled;
-        notifyPropertyChanged(BR.gyroRawZDataEnabled);
+//        notifyPropertyChanged(BR.gyroRawZDataEnabled);
     }
 
     @Bindable
@@ -509,7 +509,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroXDataFilterEnabled(boolean gyroXDataFilterEnabled) {
         this.gyroXDataFilterEnabled = gyroXDataFilterEnabled;
-        notifyPropertyChanged(BR.gyroXDataFilterEnabled);
+//        notifyPropertyChanged(BR.gyroXDataFilterEnabled);
     }
 
     @Bindable
@@ -519,7 +519,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroYDataFilterEnabled(boolean gyroYDataFilterEnabled) {
         this.gyroYDataFilterEnabled = gyroYDataFilterEnabled;
-        notifyPropertyChanged(BR.gyroYDataFilterEnabled);
+//        notifyPropertyChanged(BR.gyroYDataFilterEnabled);
     }
 
     @Bindable
@@ -529,7 +529,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroZDataFilterEnabled(boolean gyroZDataFilterEnabled) {
         this.gyroZDataFilterEnabled = gyroZDataFilterEnabled;
-        notifyPropertyChanged(BR.gyroZDataFilterEnabled);
+//        notifyPropertyChanged(BR.gyroZDataFilterEnabled);
     }
 
     @Bindable
@@ -539,7 +539,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroXFilteredThreshold(float gyroXFilteredThreshold) {
         this.gyroXFilteredThreshold = gyroXFilteredThreshold;
-        notifyPropertyChanged(BR.gyroXFilteredThreshold);
+//        notifyPropertyChanged(BR.gyroXFilteredThreshold);
     }
 
     @Bindable
@@ -549,7 +549,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroYFilteredThreshold(float gyroYFilteredThreshold) {
         this.gyroYFilteredThreshold = gyroYFilteredThreshold;
-        notifyPropertyChanged(BR.gyroYFilteredThreshold);
+//        notifyPropertyChanged(BR.gyroYFilteredThreshold);
     }
 
     @Bindable
@@ -559,7 +559,7 @@ public class Configuration extends BaseObservable {
 
     public void setGyroZFilteredThreshold(float gyroZFilteredThreshold) {
         this.gyroZFilteredThreshold = gyroZFilteredThreshold;
-        notifyPropertyChanged(BR.gyroZFilteredThreshold);
+//        notifyPropertyChanged(BR.gyroZFilteredThreshold);
     }
 
 }

@@ -1,0 +1,94 @@
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="model"
+            type="com.mushin.muconnect.ui.main.PageViewModel" />
+    </data>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="0,1"
+        android:shrinkColumns="0,1"
+        android:paddingTop="32dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Switch
+                style="@style/ConfigItem"
+                android:checked="@={model.polarConnected}"
+                android:text="Connect to Polar" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:text="Device ID" />
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="32dp"
+                android:gravity="end"
+                android:text="@={model.polarDeviceId}" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:text="Status" />
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="32dp"
+                android:gravity="end"
+                android:text="@{model.polarStatusText}" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:text="Heart Rate" />
+
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="32dp"
+                android:gravity="end"
+                android:text="@{model.polarHR}" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:id="@+id/constraintLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context="com.mushin.muconnect.ui.main.PolarFragment">-->
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+</layout>

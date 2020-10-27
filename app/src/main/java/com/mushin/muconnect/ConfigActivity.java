@@ -1,61 +1,47 @@
 package com.mushin.muconnect;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
 
 import com.mushin.muconnect.databinding.ConfigurationLayoutBinding;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-public class ConfigActivity extends DialogFragment {
-    private Dialog dialog;
+public class ConfigActivity extends AppCompatActivity {
     private ConfigurationLayoutBinding binding;
     private Configuration configuration;
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.configuration_layout, null, false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        MainActivity activity = (MainActivity) getActivity();
+        binding = DataBindingUtil.setContentView(this, R.layout.configuration_layout);
 
         configuration = new Configuration();
-        configuration.copy(activity.getDeviceConfiguration());
+        Utils.restoreDeviceConfiguration(getApplicationContext(), configuration);
 
         binding.setCfg(configuration);
         binding.setActivity(this);
-
-        View view = binding.getRoot();
-
-        builder.setView(view);
-
-        dialog = builder.create();
-
-        // hack to enable soft keyboard
-        dialog.show();
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        return dialog;
     }
 
     public void onOkButton() {
-        MainActivity activity = (MainActivity) getActivity();
-        activity.setDeviceConfiguration(configuration);
-        dialog.dismiss();
+        Utils.storeDeviceConfiguration(getApplicationContext(),configuration);
+        Intent result = new Intent();
+        setResult(Activity.RESULT_OK, result);
+        finish();
     }
 
     public void onCancelButton() {
-        dialog.dismiss();
+        Intent result = new Intent();
+        setResult(Activity.RESULT_CANCELED, result);
+        finish();
     }
+
 }
 

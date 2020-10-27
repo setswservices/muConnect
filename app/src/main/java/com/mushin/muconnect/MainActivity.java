@@ -66,6 +66,9 @@ import android.os.Message;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import polar.com.sdk.api.PolarBleApi;
+import polar.com.sdk.api.PolarBleApiDefaultImpl;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -95,6 +98,9 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.ValueDependentColor;
 
 public class MainActivity extends Activity implements RadioGroup.OnCheckedChangeListener {
+
+	PolarBleApi polarApi;
+
 	private static final int REQUEST_SELECT_DEVICE = 1;
 	private static final int REQUEST_ENABLE_BT = 2;
 	private static final int REQUEST_FILE_SELECT = 3;
@@ -515,6 +521,11 @@ public void InitGraphs()
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+		polarApi = PolarBleApiDefaultImpl.defaultImplementation(this, PolarBleApi.FEATURE_HR);
+
+		polarApi.setApiCallback(new PolarCallback());
+
         setContentView(R.layout.main);
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBtAdapter == null) {
@@ -653,8 +664,8 @@ public void InitGraphs()
 		btnConfig.setOnClickListener(new View.OnClickListener()	{
 				@Override
 				public void onClick(View v) {
-					DialogFragment newFragment = new ConfigActivity();
-					newFragment.show(getFragmentManager(), "ConfigActivity");
+//					DialogFragment newFragment = new ConfigActivity();
+//					newFragment.show(getFragmentManager(), "ConfigActivity");
 				}
 			}
 		);
@@ -1855,8 +1866,10 @@ public void InitGraphs()
     public void onDestroy() {
     	 super.onDestroy();
         Log.d(TAG, "onDestroy()");
+
+		polarApi.shutDown();
 		
-	CloseDataFile(getApplicationContext());
+		CloseDataFile(getApplicationContext());
 
         try {
         	LocalBroadcastManager.getInstance(this).unregisterReceiver(UARTStatusChangeReceiver);
@@ -1878,6 +1891,7 @@ public void InitGraphs()
     protected void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
+		polarApi.backgroundEntered();
     }
 
     @Override
@@ -1889,6 +1903,7 @@ public void InitGraphs()
     @Override
     public void onResume() {
         super.onResume();
+		polarApi.foregroundEntered();
         Log.d(TAG, "onResume");
         if (!mBtAdapter.isEnabled()) {
             Log.i(TAG, "onResume - BT not enabled yet");
