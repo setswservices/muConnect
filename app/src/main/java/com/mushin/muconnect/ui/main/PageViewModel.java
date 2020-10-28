@@ -2,14 +2,13 @@ package com.mushin.muconnect.ui.main;
 
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.mushin.muconnect.PolarCallback;
 import com.mushin.muconnect.Utils;
-
-import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -22,7 +21,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class PageViewModel extends AndroidViewModel {
 
-    private static final int MAX_DATA_POINT_COUNT = 1000;
+    private final static String TAG = PageViewModel.class.getSimpleName();
+
+    private static final int MAX_DATA_POINT_COUNT = 100;
 
     public static final String USER_SCAN_DEVICES_REQUEST = "com.muShin.DEVICE_SCAN_REQUESTED";
     public static final String USER_START_DATA_TRANSFER_REQUEST = "com.muShin.START_DATA_TRANSFER_REQUESTED";
@@ -367,36 +368,75 @@ public class PageViewModel extends AndroidViewModel {
 
     // region graph data handling
 
-    public void addLeftCrankData(double x, double y) {
+    private double lastLeftCrankData = 0;
+    private double lastRightCrankData = 0;
+
+    public void addCranksData(double tick, Double l, Double r) {
+        addLeftCrankData(tick, l == null ? lastLeftCrankData : l);
+        addRightCrankData(tick, r == null ? lastRightCrankData : r);
+    }
+
+    private void addLeftCrankData(double x, double y) {
+        Log.d(TAG, "Left crank data added " + String.valueOf(x) + " " + String.valueOf(y));
         leftCrankSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastLeftCrankData = y;
     }
 
-    public void addRightCrankData(double x, double y) {
+    private void addRightCrankData(double x, double y) {
+        Log.d(TAG, "Right crank data added " + String.valueOf(x) + " " + String.valueOf(y));
+
         rightCrankSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastRightCrankData = y;
     }
 
-    public void addAccXData(double x, double y) {
+    private double lastAccX = 0;
+    private double lastAccY = 0;
+    private double lastAccZ = 0;
+
+    public void addAccData(double tick, Double x, Double y, Double z) {
+        addAccXData(tick, x == null ? lastAccX : x);
+        addAccYData(tick, y == null ? lastAccY : y);
+        addAccZData(tick, z == null ? lastAccZ : z);
+    }
+
+    private void addAccXData(double x, double y) {
         accXSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastAccX = y;
     }
 
-    public void addAccYData(double x, double y) {
+    private void addAccYData(double x, double y) {
         accYSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastAccY = y;
     }
 
-    public void addAccZData(double x, double y) {
+    private void addAccZData(double x, double y) {
         accZSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastAccZ = y;
     }
 
-    public void addGyroXData(double x, double y) {
+    private double lastGyroX = 0;
+    private double lastGyroY = 0;
+    private double lastGyroZ = 0;
+
+    public void addGyroData(double tick, Double x, Double y, Double z) {
+        addGyroXData(tick, x == null ? lastGyroX : x);
+        addGyroYData(tick, y == null ? lastGyroY : y);
+        addGyroZData(tick, z == null ? lastGyroZ : z);
+    }
+
+    private void addGyroXData(double x, double y) {
         gyroXSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastGyroX = y;
     }
 
-    public void addGyroYData(double x, double y) {
+    private void addGyroYData(double x, double y) {
         gyroYSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastGyroY = y;
     }
 
-    public void addGyroZData(double x, double y) {
+    private void addGyroZData(double x, double y) {
         gyroZSeries.appendData(new DataPoint(x, y), true, MAX_DATA_POINT_COUNT);
+        lastGyroZ = y;
     }
 
 

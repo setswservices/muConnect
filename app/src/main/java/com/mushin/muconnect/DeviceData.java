@@ -3,13 +3,13 @@ package com.mushin.muconnect;
 import com.mushin.muconnect.ui.main.PageViewModel;
 
 public class DeviceData {
-    private static final String crankLeftData = "crankL";
-    private static final String crankRightData = "crankR";
+    private static final String crankLeftData = "L";
+    private static final String crankRightData = "R";
 
     private static final String accData = "acc";
-    private static final String accXData = "accX";
-    private static final String accYData = "accY";
-    private static final String accZData = "accZ";
+    private static final String accXData = "X";
+    private static final String accYData = "Y";
+    private static final String accZData = "Z";
 
     private static final String gyroData = "gyro";
     private static final String gyroXData = "gyroX";
@@ -31,6 +31,10 @@ public class DeviceData {
         try {
             int tickNumber = Integer.parseInt(dataPairs[0]);
 
+            Double leftCrank = null, rightCrank = null;
+            Double accX = null, accY = null, accZ = null;
+            Double gyroX = null, gyroY = null, gyroZ = null;
+
             for (int idx = 1; idx < dataPairs.length; idx++) {
                 String[] nameValue = dataPairs[idx].trim().split("\\s+");
 
@@ -39,30 +43,42 @@ public class DeviceData {
                 }
 
                 if (nameValue[0].equals(crankLeftData)) {
-                    model.addLeftCrankData(tickNumber, Float.parseFloat(nameValue[1]));
+                    leftCrank = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(crankRightData)) {
-                    model.addRightCrankData(tickNumber, Float.parseFloat(nameValue[1]));
+                    rightCrank = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(accData) && nameValue.length == 4) {
-                    model.addAccXData(tickNumber, Float.parseFloat(nameValue[1]));
-                    model.addAccYData(tickNumber, Float.parseFloat(nameValue[2]));
-                    model.addAccZData(tickNumber, Float.parseFloat(nameValue[3]));
+                    accX = Double.parseDouble(nameValue[1]);
+                    accY = Double.parseDouble(nameValue[2]);
+                    accZ = Double.parseDouble(nameValue[3]);
                 } else if (nameValue[0].equals(accXData)) {
-                    model.addAccXData(tickNumber, Float.parseFloat(nameValue[1]));
+                    accX = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(accYData)) {
-                    model.addAccYData(tickNumber, Float.parseFloat(nameValue[1]));
+                    accY = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(accZData)) {
-                    model.addAccZData(tickNumber, Float.parseFloat(nameValue[1]));
+                    accZ = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(gyroData) && nameValue.length == 4) {
-                    model.addGyroXData(tickNumber, Float.parseFloat(nameValue[1]));
-                    model.addGyroYData(tickNumber, Float.parseFloat(nameValue[2]));
-                    model.addGyroZData(tickNumber, Float.parseFloat(nameValue[3]));
+                    gyroX = Double.parseDouble(nameValue[1]);
+                    gyroY = Double.parseDouble(nameValue[2]);
+                    gyroZ = Double.parseDouble(nameValue[3]);
                 } else if (nameValue[0].equals(gyroXData)) {
-                    model.addGyroXData(tickNumber, Float.parseFloat(nameValue[1]));
+                    gyroX = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(gyroYData)) {
-                    model.addGyroYData(tickNumber, Float.parseFloat(nameValue[1]));
+                    gyroY = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(gyroZData)) {
-                    model.addGyroZData(tickNumber, Float.parseFloat(nameValue[1]));
+                    gyroZ = Double.parseDouble(nameValue[1]);
                 }
+            }
+
+            if (leftCrank != null || rightCrank != null) {
+                model.addCranksData(tickNumber, leftCrank, rightCrank);
+            }
+
+            if (accX != null || accY != null || accZ != null) {
+                model.addAccData(tickNumber, accX, accY, accZ);
+            }
+
+            if (gyroX != null || gyroY != null || gyroZ != null) {
+                model.addGyroData(tickNumber, gyroX, gyroY, gyroZ);
             }
         } catch (NumberFormatException ex) {
             result = false;
