@@ -139,10 +139,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginRight="32dp"
+                        android:layout_marginRight="8dp"
                         android:src="@drawable/ic_settings"
                         android:gravity="start|center_vertical"
                         android:onClick="@{model::onConfigureButtonClick}"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="32dp"
+                        android:src="@drawable/ic_disconnected"
+                        android:gravity="start|center_vertical"
+                        android:onClick="@{model::onDisconnectButtonClick}"/>
 
                 </LinearLayout>
             </TableRow>

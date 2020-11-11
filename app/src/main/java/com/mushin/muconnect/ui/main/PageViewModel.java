@@ -29,6 +29,7 @@ public class PageViewModel extends AndroidViewModel {
     public static final String USER_START_DATA_TRANSFER_REQUEST = "com.muShin.START_DATA_TRANSFER_REQUESTED";
     public static final String USER_STOP_DATA_TRANSFER_REQUEST = "com.muShin.STOP_DATA_TRANSFER_REQUESTED";
     public static final String USER_CONFIGURE_REQUEST = "com.muShin.CONFIGURATION_REQUESTED";
+    public static final String USER_DISCONNECT_REQUEST = "com.muShin.DISCONNECT_REQUESTED";
 
     public PageViewModel(@NonNull Application application) {
         super(application);
@@ -364,9 +365,26 @@ public class PageViewModel extends AndroidViewModel {
         broadcastUpdate(USER_CONFIGURE_REQUEST);
     }
 
+    public void onDisconnectButtonClick(View view) {
+        broadcastUpdate(USER_DISCONNECT_REQUEST);
+    }
+
     // endregion button handlers
 
     // region graph data handling
+
+    public void resetAllSeries() {
+        leftCrankSeries.resetData(new DataPoint[0]);
+        rightCrankSeries.resetData(new DataPoint[0]);
+
+        accXSeries.resetData(new DataPoint[0]);
+        accYSeries.resetData(new DataPoint[0]);
+        accZSeries.resetData(new DataPoint[0]);
+
+        gyroXSeries.resetData(new DataPoint[0]);
+        gyroYSeries.resetData(new DataPoint[0]);
+        gyroZSeries.resetData(new DataPoint[0]);
+    }
 
     private double lastLeftCrankData = 0;
     private double lastRightCrankData = 0;

@@ -16,6 +16,8 @@ public class DeviceData {
     private static final String gyroYData = "gyroY";
     private static final String gyroZData = "gyroZ";
 
+    private static double lastTickNumber = -1;
+
     public static boolean process(PageViewModel model, String data) {
         boolean result = true;
 
@@ -30,6 +32,12 @@ public class DeviceData {
 
         try {
             int tickNumber = Integer.parseInt(dataPairs[0]);
+
+            if (tickNumber < lastTickNumber) {
+                model.resetAllSeries();
+            }
+
+            lastTickNumber = tickNumber;
 
             Double leftCrank = null, rightCrank = null;
             Double accX = null, accY = null, accZ = null;

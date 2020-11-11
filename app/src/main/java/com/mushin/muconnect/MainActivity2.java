@@ -306,6 +306,7 @@ public class MainActivity2 extends AppCompatActivity {
         intentFilter.addAction(PageViewModel.USER_START_DATA_TRANSFER_REQUEST);
         intentFilter.addAction(PageViewModel.USER_STOP_DATA_TRANSFER_REQUEST);
         intentFilter.addAction(PageViewModel.USER_CONFIGURE_REQUEST);
+        intentFilter.addAction(PageViewModel.USER_DISCONNECT_REQUEST);
 
         return intentFilter;
     }
@@ -379,10 +380,14 @@ public class MainActivity2 extends AppCompatActivity {
 //                newFragment.show(getFragmentManager(), "ConfigActivity");
                 Intent activityIntent = new Intent(MainActivity2.this, com.mushin.muconnect.ConfigActivity.class);
                 mConfigLauncher.launch(activityIntent);
+            } else if (action.equals(PageViewModel.USER_DISCONNECT_REQUEST)) {
+                mService.disconnect();
             } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
                 pageViewModel.setConnectionState(PageViewModel.ConnectionState.Connected);
             } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
                 pageViewModel.setConnectionState(PageViewModel.ConnectionState.Disconnected);
+                pageViewModel.setDeviceId(null);
+                mService.close();
             } else if (action.equals(UartService.ACTION_GATT_RECONNECTING)) {
                 pageViewModel.setConnectionState(PageViewModel.ConnectionState.Connecting);
             } else if (action.equals(UartService.ACTION_GATT_READY)) {
