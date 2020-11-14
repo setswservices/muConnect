@@ -11,6 +11,9 @@ public class DeviceCommand {
     public static String TemperatureEnabled = "TEMP_ON";
     public static String TemperatureDisabled = "TEMP_OFF";
 
+    public static String EmulationEnabled = "EMULATION_ON";
+    public static String EmulationDisabled = "EMULATION_OFF";
+
     public static String LeftCrankDataEnabled = "CRANK_LEFT_ON";
     public static String LeftCrankDataDisabled = "CRANK_LEFT_OFF";
     public static String RightCrankDataEnabled = "CRANK_RIGHT_ON";

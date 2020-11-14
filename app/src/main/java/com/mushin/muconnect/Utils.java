@@ -42,6 +42,7 @@ public class Utils {
 
         editor.putInt("cfg_dataInterval", config.getDataInterval());
         editor.putBoolean("cfg_temperatureDataEnabled", config.isTemperatureDataEnabled());
+        editor.putBoolean("cfg_emulationEnabled", config.isEmulationEnabled());
 
         editor.putBoolean("cfg_leftCrankDataEnabled", config.isLeftCrankDataEnabled());
         editor.putBoolean("cfg_rightCrankDataEnabled", config.isRightCrankDataEnabled());
@@ -111,6 +112,7 @@ public class Utils {
 
         config.setDataInterval(preferences.getInt("cfg_dataInterval", defaultCfg.getDataInterval()));
         config.setTemperatureDataEnabled(preferences.getBoolean("cfg_temperatureDataEnabled", defaultCfg.isTemperatureDataEnabled()));
+        config.setEmulationEnabled(preferences.getBoolean("cfg_emulationEnabled", defaultCfg.isEmulationEnabled()));
 
         config.setLeftCrankDataEnabled(preferences.getBoolean("cfg_leftCrankDataEnabled", defaultCfg.isLeftCrankDataEnabled()));
         config.setRightCrankDataEnabled(preferences.getBoolean("cfg_rightCrankDataEnabled", defaultCfg.isRightCrankDataEnabled()));

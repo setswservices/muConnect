@@ -10,6 +10,8 @@ public class Configuration extends BaseObservable {
     private int dataInterval = 0;
     private boolean temperatureDataEnabled = false;
 
+    private boolean emulationEnabled = false;
+
     // cranks
     private boolean leftCrankDataEnabled = false;
     private boolean rightCrankDataEnabled = false;
@@ -55,6 +57,8 @@ public class Configuration extends BaseObservable {
 
         result.dataInterval = other.getDataInterval();
         result.temperatureDataEnabled = other.isTemperatureDataEnabled();
+
+        result.emulationEnabled = other.isEmulationEnabled();
 
         result.leftCrankDataEnabled = other.isLeftCrankDataEnabled();
         result.rightCrankDataEnabled = other.isRightCrankDataEnabled();
@@ -103,6 +107,10 @@ public class Configuration extends BaseObservable {
 
         if (cfgOld.isTemperatureDataEnabled() != cfgNew.isTemperatureDataEnabled()) {
             result.add(cfgNew.isTemperatureDataEnabled() ? DeviceCommand.TemperatureEnabled : DeviceCommand.TemperatureDisabled);
+        }
+
+        if (cfgOld.isEmulationEnabled() != cfgNew.isEmulationEnabled()) {
+            result.add(cfgNew.isEmulationEnabled() ? DeviceCommand.EmulationEnabled : DeviceCommand.EmulationDisabled);
         }
 
         if (cfgOld.isLeftCrankDataEnabled() != cfgNew.isLeftCrankDataEnabled()) {
@@ -260,6 +268,15 @@ public class Configuration extends BaseObservable {
     public void setTemperatureDataEnabled(boolean temperatureDataEnabled) {
         this.temperatureDataEnabled = temperatureDataEnabled;
 //        notifyPropertyChanged(BR.temperatureDataEnabled);
+    }
+
+    @Bindable
+    public boolean isEmulationEnabled() {
+        return emulationEnabled;
+    }
+
+    public void setEmulationEnabled(boolean emulationEnabled) {
+        this.emulationEnabled = emulationEnabled;
     }
 
     @Bindable

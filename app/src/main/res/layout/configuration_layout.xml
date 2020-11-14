@@ -46,6 +46,27 @@
 
                 <TextView
                     style="@style/CategoryText"
+                    android:text="@string/emulation" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Switch
+                    style="@style/ConfigItem"
+                    android:checked="@={cfg.emulationEnabled}"
+                    android:text="@string/enable_data_emulation" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    style="@style/CategoryText"
                     android:text="@string/cranks" />
 
             </TableRow>
