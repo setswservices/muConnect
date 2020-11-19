@@ -46,7 +46,7 @@
             android:name=".UartService"
             android:enabled="true" />
 
-        <activity android:name=".ButtonsActivity" />
+<!--        <activity android:name=".ButtonsActivity" />-->
     </application>
 
 </manifest>
