@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: ./app/libs/polar-ble-sdk.aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9fce68634c7f9323a1531600d2e6a396/jetified-polar-ble-sdk/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba7a9be9e43574e01885cc88ff99d8eb/jetified-polar-ble-sdk/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9fce68634c7f9323a1531600d2e6a396/jetified-polar-ble-sdk/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9fce68634c7f9323a1531600d2e6a396/jetified-polar-ble-sdk/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9fce68634c7f9323a1531600d2e6a396/jetified-polar-ble-sdk/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba7a9be9e43574e01885cc88ff99d8eb/jetified-polar-ble-sdk/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba7a9be9e43574e01885cc88ff99d8eb/jetified-polar-ble-sdk/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ba7a9be9e43574e01885cc88ff99d8eb/jetified-polar-ble-sdk/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

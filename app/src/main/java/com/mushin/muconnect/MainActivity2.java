@@ -57,8 +57,8 @@ public class MainActivity2 extends AppCompatActivity {
 
     private BluetoothAdapter mBluetoothAdapter;
 
-    private static final int REQUEST_COARSE_LOCATION_PERMISSION = 200;
-    private String permissions = Manifest.permission.ACCESS_COARSE_LOCATION;
+//    private static final int REQUEST_COARSE_LOCATION_PERMISSION = 200;
+//    private String permissions = Manifest.permission.ACCESS_COARSE_LOCATION;
 
     Configuration deviceConfiguration = new Configuration();
 
@@ -75,6 +75,12 @@ public class MainActivity2 extends AppCompatActivity {
 //        String cfgUpdate = TextUtils.join(",", updateCfgCommands);
         bleWrite(updateCfgCommands);
     }
+
+    private String[] permissions = {
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private PermissionUtility permissionUtility;
 
     // region Activity lifecycle
     @Override
@@ -114,7 +120,13 @@ public class MainActivity2 extends AppCompatActivity {
             return;
         }
 
-        checkBtScanPermissions();
+//        checkBtScanPermissions();
+        permissionUtility = new PermissionUtility(this, permissions);
+        if(permissionUtility.arePermissionsEnabled()){
+            Log.d(TAG, "Permission already granted");
+        } else {
+            permissionUtility.requestMultiplePermissions();
+        }
 
         Utils.restoreDeviceConfiguration(this, getDeviceConfiguration());
     }
@@ -139,6 +151,8 @@ public class MainActivity2 extends AppCompatActivity {
         super.onPause();
         polarCallback.setContext(null);
         polarApi.backgroundEntered();
+
+        DataLogger.getInstance().stopLogging();
     }
 
     @Override
@@ -159,6 +173,7 @@ public class MainActivity2 extends AppCompatActivity {
     // endregion
 
     // region permissions handling
+/*
     private void checkBtScanPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
 //            populateList();
@@ -175,23 +190,26 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
     }
-
+*/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        boolean permissionsGranted = false;
-
-        switch (requestCode){
-            case REQUEST_COARSE_LOCATION_PERMISSION:
-                permissionsGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                break;
+        if(permissionUtility.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            Log.d(TAG, "Permissions granted");
         }
-        if (permissionsGranted ) {
-//            populateList();
-        } else {
-//            Log.d(TAG, "Can't get results from BLE scan, permissions not granted");
-        }
+//        boolean permissionsGranted = false;
+//
+//        switch (requestCode){
+//            case REQUEST_COARSE_LOCATION_PERMISSION:
+//                permissionsGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//                break;
+//        }
+//        if (permissionsGranted ) {
+////            populateList();
+//        } else {
+////            Log.d(TAG, "Can't get results from BLE scan, permissions not granted");
+//        }
     }
 
     // endregion
@@ -274,6 +292,8 @@ public class MainActivity2 extends AppCompatActivity {
                         Configuration configuration = new Configuration();
                         Utils.restoreDeviceConfiguration(getApplicationContext(), configuration);
                         setDeviceConfiguration(configuration);
+
+                        DataLogger.getInstance().setConfiguration(configuration);
                     }
                 }
             });
@@ -373,8 +393,10 @@ public class MainActivity2 extends AppCompatActivity {
                 mScanForDeviceLauncher.launch(activityIntent);
             } else if (action.equals(PageViewModel.USER_START_DATA_TRANSFER_REQUEST)) {
                 bleWrite(DeviceCommand.Start);
+                DataLogger.getInstance().startLogging();
             } else if (action.equals(PageViewModel.USER_STOP_DATA_TRANSFER_REQUEST)) {
                 bleWrite(DeviceCommand.Stop);
+                DataLogger.getInstance().stopLogging();
             } else if (action.equals(PageViewModel.USER_CONFIGURE_REQUEST)) {
 //                DialogFragment newFragment = new ConfigActivity();
 //                newFragment.show(getFragmentManager(), "ConfigActivity");
@@ -382,6 +404,7 @@ public class MainActivity2 extends AppCompatActivity {
                 mConfigLauncher.launch(activityIntent);
             } else if (action.equals(PageViewModel.USER_DISCONNECT_REQUEST)) {
                 mService.disconnect();
+                DataLogger.getInstance().stopLogging();
             } else if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
                 pageViewModel.setConnectionState(PageViewModel.ConnectionState.Connected);
             } else if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {

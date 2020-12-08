@@ -2,9 +2,10 @@
   <library name="Gradle: ./app/libs/polar-protobuf-release.aar">
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1cc06cc251d26231399f9c199bad7f18/jetified-polar-protobuf-release/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e633563b8393afc89e12829b3f21c154/jetified-polar-protobuf-release/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e633563b8393afc89e12829b3f21c154/jetified-polar-protobuf-release/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/e633563b8393afc89e12829b3f21c154/jetified-polar-protobuf-release/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0994972459061824f419cf20ea2c423f/jetified-polar-protobuf-release/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0994972459061824f419cf20ea2c423f/jetified-polar-protobuf-release/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0994972459061824f419cf20ea2c423f/jetified-polar-protobuf-release/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

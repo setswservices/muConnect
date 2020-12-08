@@ -88,6 +88,9 @@ public class DeviceData {
             if (gyroX != null || gyroY != null || gyroZ != null) {
                 model.addGyroData(tickNumber, gyroX, gyroY, gyroZ);
             }
+
+            DataLogger.getInstance().addData(tickNumber, leftCrank, rightCrank, accX, accY, accZ, gyroX, gyroY, gyroZ);
+
         } catch (NumberFormatException ex) {
             result = false;
         }
