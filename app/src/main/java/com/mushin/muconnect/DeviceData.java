@@ -18,6 +18,26 @@ public class DeviceData {
 
     private static double lastTickNumber = -1;
 
+    private static String mockData() {
+        double tick = lastTickNumber < 0 ? 0 : lastTickNumber + 1;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(Math.round(tick));
+        stringBuilder.append(",");
+
+        stringBuilder.append(crankLeftData);
+        stringBuilder.append(" ");
+        stringBuilder.append(Math.random() * 3);
+        stringBuilder.append(",");
+
+        stringBuilder.append(crankRightData);
+        stringBuilder.append(" ");
+        stringBuilder.append(Math.random() * 3);
+
+        return stringBuilder.toString();
+    }
+
     public static boolean process(PageViewModel model, String data) {
         boolean result = true;
 

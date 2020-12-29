@@ -26,6 +26,7 @@ public class DataLogger {
         return mInstance;
     }
 
+    private boolean isEnabled = false;
     private String mLogFileName = null;
     private File mLogFile = null;
     private FileWriter mLogFileWriter = null;
@@ -33,6 +34,10 @@ public class DataLogger {
     private boolean headerWritten = false;
 
     private boolean checkLogFile() {
+        if (!isEnabled()) {
+            return false;
+        }
+
         boolean result = true;
 
         if (mLogFileName == null) {
@@ -95,6 +100,9 @@ public class DataLogger {
                              Double accX, Double accY, Double accZ,
                              Double gyroX, Double gyroY, Double gyroZ) {
 
+        if (!isEnabled()) {
+            return;
+        }
         if (!checkLogFile() || headerWritten) {
             return;
         }
@@ -166,6 +174,10 @@ public class DataLogger {
                                Double accX, Double accY, Double accZ,
                                Double gyroX, Double gyroY, Double gyroZ) {
 
+        if (!isEnabled()) {
+            return;
+        }
+
         if (!checkLogFile()) {
             return;
         }
@@ -232,5 +244,13 @@ public class DataLogger {
 
     public void stopLogging() {
         closeLogFile();
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }

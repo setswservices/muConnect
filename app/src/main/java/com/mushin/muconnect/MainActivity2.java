@@ -393,9 +393,11 @@ public class MainActivity2 extends AppCompatActivity {
                 mScanForDeviceLauncher.launch(activityIntent);
             } else if (action.equals(PageViewModel.USER_START_DATA_TRANSFER_REQUEST)) {
                 bleWrite(DeviceCommand.Start);
+                DataLogger.getInstance().setEnabled(true);
                 DataLogger.getInstance().startLogging();
             } else if (action.equals(PageViewModel.USER_STOP_DATA_TRANSFER_REQUEST)) {
                 bleWrite(DeviceCommand.Stop);
+                DataLogger.getInstance().setEnabled(false);
                 DataLogger.getInstance().stopLogging();
             } else if (action.equals(PageViewModel.USER_CONFIGURE_REQUEST)) {
 //                DialogFragment newFragment = new ConfigActivity();
