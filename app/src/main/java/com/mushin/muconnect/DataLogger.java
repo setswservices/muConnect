@@ -33,6 +33,25 @@ public class DataLogger {
 
     private boolean headerWritten = false;
 
+    double m_timestamp = -1;
+    Double m_leftCrank;
+    Double m_rightCrank;
+    Double m_accX;
+    Double m_accY;
+    Double m_accZ;
+    Double m_gyroX;
+    Double m_gyroY;
+    Double m_gyroZ;
+
+    boolean m_leftCrankEnabled;
+    boolean m_rightCrankEnabled;
+    boolean m_accXEnabled;
+    boolean m_accYEnabled;
+    boolean m_accZEnabled;
+    boolean m_gyroXEnabled;
+    boolean m_gyroYEnabled;
+    boolean m_gyroZEnabled;
+
     private boolean checkLogFile() {
         if (!isEnabled()) {
             return false;
@@ -84,6 +103,9 @@ public class DataLogger {
 
     private void closeLogFile() {
         if (mLogFileWriter != null) {
+
+            _flush();
+
             try {
                 mLogFileWriter.close();
             } catch (IOException e) {
@@ -93,12 +115,12 @@ public class DataLogger {
             mLogFileWriter = null;
             mLogFile = null;
             mLogFileName = null;
+
+            headerWritten = false;
         }
     }
 
-    private void writeHeader(Double leftCrank, Double righCrank,
-                             Double accX, Double accY, Double accZ,
-                             Double gyroX, Double gyroY, Double gyroZ) {
+    private void writeHeader() {
 
         if (!isEnabled()) {
             return;
@@ -110,35 +132,35 @@ public class DataLogger {
         List<String> columns = new ArrayList<>();
         columns.add("Timestamp");
 
-        if (leftCrank != null) {
+        if (m_leftCrankEnabled) {
             columns.add("Left Crank");
         }
 
-        if (righCrank != null) {
+        if (m_rightCrankEnabled) {
             columns.add("Right Crank");
         }
 
-        if (accX != null) {
+        if (m_accXEnabled) {
             columns.add("Acceleration X Axis");
         }
 
-        if (accY != null) {
+        if (m_accYEnabled) {
             columns.add("Acceleration Y Axis");
         }
 
-        if (accZ != null) {
+        if (m_accZEnabled) {
             columns.add("Acceleration Z Axis");
         }
 
-        if (gyroX != null) {
+        if (m_gyroXEnabled) {
             columns.add("Gyro X Axis");
         }
 
-        if (gyroY != null) {
+        if (m_gyroYEnabled) {
             columns.add("Gyro Y Axis");
         }
 
-        if (gyroZ != null) {
+        if (m_gyroZEnabled) {
             columns.add("Gyro Z Axis");
         }
 
@@ -158,19 +180,19 @@ public class DataLogger {
 
         stopLogging();
 
-        writeHeader(
-                config.isLeftCrankDataEnabled() ? 0.0 : null,
-                config.isRightCrankDataEnabled() ? 0.0 : null,
-                config.isAccXDataEnabled() ? 0.0 : null,
-                config.isAccYDataEnabled() ? 0.0 : null,
-                config.isAccZDataEnabled() ? 0.0 : null,
-                config.isGyroXDataEnabled() ? 0.0 : null,
-                config.isGyroYDataEnabled() ? 0.0 : null,
-                config.isGyroZDataEnabled() ? 0.0 : null
-                );
+        m_leftCrankEnabled = config.isLeftCrankDataEnabled();
+        m_rightCrankEnabled = config.isRightCrankDataEnabled();
+
+        m_accXEnabled = config.isAccXDataEnabled();
+        m_accYEnabled = config.isAccYDataEnabled();
+        m_accZEnabled = config.isAccZDataEnabled();
+
+        m_gyroXEnabled = config.isGyroXDataEnabled();
+        m_gyroYEnabled = config.isGyroYDataEnabled();
+        m_gyroZEnabled = config.isGyroZDataEnabled();
     }
 
-    public void addData(double timestamp, Double leftCrank, Double righCrank,
+    public void addData(double timestamp, Double leftCrank, Double rightCrank,
                                Double accX, Double accY, Double accZ,
                                Double gyroX, Double gyroY, Double gyroZ) {
 
@@ -183,53 +205,92 @@ public class DataLogger {
         }
 
         if (!headerWritten) {
-            writeHeader(leftCrank, righCrank, accX, accY, accZ, gyroX, gyroY, gyroZ);
+            writeHeader();
+        }
+
+        if (timestamp != m_timestamp) {
+            _flush();
+        }
+
+        m_timestamp = timestamp;
+
+        m_leftCrank = leftCrank!= null ? leftCrank : m_leftCrank;
+        m_rightCrank = rightCrank!= null ? rightCrank : m_rightCrank;
+
+        m_accX = accX != null ? accX : m_accX;
+        m_accY = accY != null ? accY : m_accY;
+        m_accZ = accZ != null ? accZ : m_accZ;
+
+        m_gyroX = gyroX != null ? gyroX : m_gyroX;
+        m_gyroY = gyroY != null ? gyroY : m_gyroY;
+        m_gyroZ = gyroZ != null ? gyroZ : m_gyroZ;
+
+    }
+
+    private void _flush() {
+
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (m_timestamp < 0) {
+            return;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(timestamp);
+        stringBuilder.append(m_timestamp);
 
-        if (leftCrank != null) {
+        if (m_leftCrankEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(leftCrank);
+            stringBuilder.append(m_leftCrank != null ? m_leftCrank : 0.0);
+            m_leftCrank = null;
         }
 
-        if (righCrank != null) {
+        if (m_rightCrankEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(righCrank);
+            stringBuilder.append(m_rightCrank != null ? m_rightCrank : 0.0);
+            m_rightCrank = null;
         }
 
-        if (accX != null) {
+        if (m_accXEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(accX);
+            stringBuilder.append(m_accX != null ? m_accX : 0.0);
+            m_accX = null;
         }
 
-        if (accY != null) {
+        if (m_accYEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(accY);
+            stringBuilder.append(m_accY != null ? m_accY : 0.0);
+            m_accY = null;
         }
 
-        if (accZ != null) {
+        if (m_accZEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(accZ);
+            stringBuilder.append(m_accZ != null ? m_accZ : 0.0);
+            m_accZ = null;
         }
 
-        if (gyroX != null) {
+        if (m_gyroXEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(gyroX);
+            stringBuilder.append(m_gyroX != null ? m_gyroX : 0.0);
+            m_gyroX = null;
         }
 
-        if (gyroY != null) {
+        if (m_gyroYEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(gyroY);
+            stringBuilder.append(m_gyroY != null ? m_gyroY : 0.0);
+            m_gyroY = null;
         }
 
-        if (gyroZ != null) {
+        if (m_gyroZEnabled) {
             stringBuilder.append(", ");
-            stringBuilder.append(gyroZ);
+            stringBuilder.append(m_gyroZ != null ? m_gyroZ : 0.0);
+            m_gyroZ = null;
         }
 
         stringBuilder.append("\n");
+
+        m_timestamp = -1;
 
         try {
             mLogFileWriter.append(stringBuilder.toString());

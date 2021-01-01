@@ -29,11 +29,11 @@ public class DeviceData {
         stringBuilder.append(crankLeftData);
         stringBuilder.append(" ");
         stringBuilder.append(Math.random() * 3);
-        stringBuilder.append(",");
-
-        stringBuilder.append(crankRightData);
-        stringBuilder.append(" ");
-        stringBuilder.append(Math.random() * 3);
+//        stringBuilder.append(",");
+//
+//        stringBuilder.append(crankRightData);
+//        stringBuilder.append(" ");
+//        stringBuilder.append(Math.random() * 3);
 
         return stringBuilder.toString();
     }
