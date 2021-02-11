@@ -52,7 +52,7 @@ public class MushinFragment extends Fragment {
         cranksGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         cranksGraph.getViewport().setXAxisBoundsManual(true);
         cranksGraph.getViewport().setMinX(0);
-        cranksGraph.getViewport().setMaxX(40);
+        cranksGraph.getViewport().setMaxX(400);
 
         LineGraphSeries<DataPoint> leftCrankSeries = pageViewModel.getLeftCrankSeries();
         leftCrankSeries.setColor(Color.BLUE);
@@ -74,7 +74,7 @@ public class MushinFragment extends Fragment {
         accGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         accGraph.getViewport().setXAxisBoundsManual(true);
         accGraph.getViewport().setMinX(0);
-        accGraph.getViewport().setMaxX(40);
+        accGraph.getViewport().setMaxX(400);
 
         LineGraphSeries<DataPoint> xAccSeries = pageViewModel.getAccXSeries();
         xAccSeries.setColor(Color.RED);
@@ -101,7 +101,7 @@ public class MushinFragment extends Fragment {
         gyroGraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         gyroGraph.getViewport().setXAxisBoundsManual(true);
         gyroGraph.getViewport().setMinX(0);
-        gyroGraph.getViewport().setMaxX(40);
+        gyroGraph.getViewport().setMaxX(400);
 
         LineGraphSeries<DataPoint> xGyroSeries = pageViewModel.getGyroXSeries();
         xGyroSeries.setColor(Color.RED);

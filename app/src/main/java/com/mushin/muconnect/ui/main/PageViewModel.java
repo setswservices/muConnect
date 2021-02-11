@@ -23,7 +23,7 @@ public class PageViewModel extends AndroidViewModel {
 
     private final static String TAG = PageViewModel.class.getSimpleName();
 
-    private static final int MAX_DATA_POINT_COUNT = 100;
+    private static final int MAX_DATA_POINT_COUNT = 1000;
 
     public static final String USER_SCAN_DEVICES_REQUEST = "com.muShin.DEVICE_SCAN_REQUESTED";
     public static final String USER_START_DATA_TRANSFER_REQUEST = "com.muShin.START_DATA_TRANSFER_REQUESTED";
