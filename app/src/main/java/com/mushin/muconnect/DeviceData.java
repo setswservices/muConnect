@@ -16,6 +16,9 @@ public class DeviceData {
     private static final String gyroYData = "gyroY";
     private static final String gyroZData = "gyroZ";
 
+    private static final String voltageData = "V";
+
+
     private static double lastTickNumber = -1;
 
     private static String mockData() {
@@ -63,6 +66,8 @@ public class DeviceData {
             Double accX = null, accY = null, accZ = null;
             Double gyroX = null, gyroY = null, gyroZ = null;
 
+            Double voltage = null;
+
             for (int idx = 1; idx < dataPairs.length; idx++) {
                 String[] nameValue = dataPairs[idx].trim().split("\\s+");
 
@@ -94,6 +99,8 @@ public class DeviceData {
                     gyroY = Double.parseDouble(nameValue[1]);
                 } else if (nameValue[0].equals(gyroZData)) {
                     gyroZ = Double.parseDouble(nameValue[1]);
+                } else if (nameValue[0].equals(voltageData)) {
+                    voltage = Double.parseDouble(nameValue[1]);
                 }
             }
 
@@ -109,7 +116,7 @@ public class DeviceData {
                 model.addGyroData(tickNumber, gyroX, gyroY, gyroZ);
             }
 
-            DataLogger.getInstance().addData(tickNumber, leftCrank, rightCrank, accX, accY, accZ, gyroX, gyroY, gyroZ);
+            DataLogger.getInstance().addData(tickNumber, voltage, leftCrank, rightCrank, accX, accY, accZ, gyroX, gyroY, gyroZ);
 
         } catch (NumberFormatException ex) {
             result = false;

@@ -34,6 +34,8 @@ public class DataLogger {
     private boolean headerWritten = false;
 
     double m_timestamp = -1;
+    Double m_voltage = 0.0;
+
     Double m_leftCrank;
     Double m_rightCrank;
     Double m_accX;
@@ -132,6 +134,8 @@ public class DataLogger {
         List<String> columns = new ArrayList<>();
         columns.add("Timestamp");
 
+        columns.add("Excitation Voltage");
+
         if (m_leftCrankEnabled) {
             columns.add("Left Crank");
         }
@@ -192,7 +196,7 @@ public class DataLogger {
         m_gyroZEnabled = config.isGyroZDataEnabled();
     }
 
-    public void addData(double timestamp, Double leftCrank, Double rightCrank,
+    public void addData(double timestamp, Double voltage, Double leftCrank, Double rightCrank,
                                Double accX, Double accY, Double accZ,
                                Double gyroX, Double gyroY, Double gyroZ) {
 
@@ -214,8 +218,10 @@ public class DataLogger {
 
         m_timestamp = timestamp;
 
-        m_leftCrank = leftCrank!= null ? leftCrank : m_leftCrank;
-        m_rightCrank = rightCrank!= null ? rightCrank : m_rightCrank;
+        m_voltage = voltage != null ? voltage : m_voltage;
+
+        m_leftCrank = leftCrank != null ? leftCrank : m_leftCrank;
+        m_rightCrank = rightCrank != null ? rightCrank : m_rightCrank;
 
         m_accX = accX != null ? accX : m_accX;
         m_accY = accY != null ? accY : m_accY;
@@ -239,6 +245,10 @@ public class DataLogger {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(m_timestamp);
+
+        stringBuilder.append(", ");
+        stringBuilder.append(m_voltage);
+        m_voltage = null;
 
         if (m_leftCrankEnabled) {
             stringBuilder.append(", ");
